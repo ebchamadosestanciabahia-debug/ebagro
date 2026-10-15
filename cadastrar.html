@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Cadastro</title>
+<meta name="description" content="Cadastro em dois níveis: inicial (libera navegação e Radar) e completo (habilita oferta, cadastro de lote e negociação após validação EB Agro).">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <section class="section">
+    <div class="wrap grid-23" style="align-items:start">
+      <!-- LATERAL: níveis -->
+      <div style="position:sticky;top:98px">
+        <span class="eyebrow">Cadastro em dois níveis</span>
+        <h1 style="font-size:clamp(2rem,4vw,3rem);margin:1rem 0 .8rem">Uma conta só, para comprar e vender.</h1>
+        <p class="muted" style="margin-bottom:1.6rem">Comece leve. Habilite-se para ofertar quando quiser — sem duplicar cadastro.</p>
+        <div style="display:flex;flex-direction:column;gap:1rem">
+          <div class="level" id="lv1">
+            <h4><span>Nível 1 · Cadastro inicial</span><span class="status status--neutral">1 min</span></h4>
+            <p class="small muted">Nome, celular/WhatsApp, e-mail e município/UF.</p>
+            <ul><li><span id="c1"></span> Navegar por Janelas e Catálogo</li><li><span id="c2"></span> Acessar o Radar de Mercado</li><li><span id="c3"></span> Registrar interesse em oportunidades</li></ul>
+          </div>
+          <div class="level" id="lv2">
+            <h4><span>Nível 2 · Cadastro completo</span><span class="status status--pre">validação EB Agro</span></h4>
+            <p class="small muted">Documentos e dados da propriedade. Validação em até 1 dia útil.</p>
+            <ul><li><span id="c4"></span> Registrar ofertas nas Janelas</li><li><span id="c5"></span> Cadastrar lotes no Catálogo</li><li><span id="c6"></span> Negociar com condução assistida</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULÁRIOS -->
+      <div class="hero-card" style="padding:clamp(1.6rem,3vw,2.4rem)">
+        <div class="stepper" id="stepper">
+          <div class="s active" data-s="1"><span class="n">1</span><span class="txt">Inicial</span></div><div class="bar"></div>
+          <div class="s" data-s="2"><span class="n">2</span><span class="txt">Completo</span></div><div class="bar"></div>
+          <div class="s" data-s="3"><span class="n">3</span><span class="txt">Validação</span></div>
+        </div>
+
+        <!-- PASSO 1 -->
+        <form id="f1" class="step" style="display:flex;flex-direction:column;gap:1.1rem">
+          <div><h2 style="font-size:1.6rem">Cadastro inicial</h2><p class="muted small">Libera a navegação completa e o Radar de Mercado.</p></div>
+          <div class="field"><label>Nome completo <span class="req">*</span></label><input class="input" id="nome" type="text" required placeholder="Seu nome"></div>
+          <div class="field-row">
+            <div class="field"><label>Celular / WhatsApp <span class="req">*</span></label><input class="input" type="tel" required placeholder="(65) 90000-0000"></div>
+            <div class="field"><label>E-mail <span class="req">*</span></label><input class="input" type="email" required placeholder="voce@email.com"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Município <span class="req">*</span></label><input class="input" type="text" required placeholder="Ex.: Rosário Oeste"></div>
+            <div class="field"><label>UF <span class="req">*</span></label><select class="select" required><option value="">UF</option><option selected>MT</option><option>MS</option><option>GO</option><option>SP</option><option>MG</option><option>BA</option><option>PA</option><option>Outro</option></select></div>
+          </div>
+          <div class="field"><label>Tenho interesse em</label>
+            <div class="filter-pills"><label class="pill-check"><input type="radio" name="perfil" value="Comprar" checked> Comprar</label><label class="pill-check"><input type="radio" name="perfil" value="Vender"> Vender</label><label class="pill-check"><input type="radio" name="perfil" value="Ambos"> Comprar e vender</label></div>
+          </div>
+          <label class="checkbox"><input type="checkbox" required> Aceito receber contato por WhatsApp e concordo com a Política de Privacidade.</label>
+          <button class="btn btn--primary btn--lg btn--block" type="submit">Criar cadastro inicial</button>
+          <p class="hint" style="text-align:center">Já tem conta? <a href="login.html" style="color:var(--green);font-weight:600">Entrar</a></p>
+        </form>
+
+        <!-- INTERLÚDIO -->
+        <div id="s1ok" class="step" style="display:none;text-align:center;padding:1rem 0">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;margin:0 auto 1rem" id="okIc"></div>
+          <h2 style="font-size:1.6rem">Cadastro inicial criado!</h2>
+          <p class="muted" style="margin:.5rem 0 1.4rem">Você já pode navegar, acessar o Radar e registrar interesse. Para <b>ofertar</b> e <b>cadastrar lotes</b>, complete o cadastro.</p>
+          <div class="row" style="justify-content:center"><button class="btn btn--primary btn--lg" id="goStep2">Completar cadastro agora</button><a class="btn btn--ghost btn--lg" id="goNext" href="janelas.html">Navegar primeiro</a></div>
+        </div>
+
+        <!-- PASSO 2 -->
+        <form id="f2" class="step" style="display:none;flex-direction:column;gap:1.1rem">
+          <div><h2 style="font-size:1.6rem">Cadastro completo</h2><p class="muted small">Habilita oferta, cadastro de lote e negociação após validação EB Agro.</p></div>
+          <div class="field-row">
+            <div class="field"><label>CPF / CNPJ <span class="req">*</span></label><input class="input" type="text" required placeholder="000.000.000-00"></div>
+            <div class="field"><label>Inscrição Estadual (produtor) <span class="req">*</span></label><input class="input" type="text" required placeholder="IE"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Nome da propriedade <span class="req">*</span></label><input class="input" type="text" required placeholder="Fazenda…"></div>
+            <div class="field"><label>Região do piloto <span class="req">*</span></label><select class="select" required><option value="">Selecione</option><option>Sul (MT)</option><option>Baixada (MT)</option><option>Guaporé (MT)</option><option>Outra — fora do piloto</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Rebanho aproximado (cab.)</label><input class="input" type="text" placeholder="Ex.: 800"></div>
+            <div class="field"><label>Categorias de interesse</label><select class="select"><option>Corte · Machos 180–260 kg</option><option>Corte · Machos 260–350 kg</option><option>Corte · Fêmeas</option><option>Genética · Nelore P.O</option><option>Genética · Cruzados</option></select></div>
+          </div>
+          <div class="field"><label>Documentos <span class="req">*</span></label>
+            <div class="filter-pills"><label class="pill-check"><input type="checkbox" required> Documento com foto</label><label class="pill-check"><input type="checkbox" required> Comprovante da IE</label><label class="pill-check"><input type="checkbox"> Cartão CNPJ (se PJ)</label></div>
+            <span class="hint">Envio pelo WhatsApp ou upload após esta etapa. Nenhum dado bancário é solicitado — pagamento à vista, conduzido pela EB Agro.</span>
+          </div>
+          <label class="checkbox"><input type="checkbox" required> Li e aceito o <b>Regulamento Geral</b>: taxa de serviço de 5% (2,5% comprador + 2,5% vendedor), pagamento à vista e negociação com condução assistida.</label>
+          <button class="btn btn--primary btn--lg btn--block" type="submit">Enviar para validação EB Agro</button>
+        </form>
+
+        <!-- PASSO 3 -->
+        <div id="s3" class="step" style="display:none">
+          <div class="notice notice--gold" style="margin-bottom:1.4rem"><span id="s3ic"></span><div><b>Cadastro completo em validação.</b> Nosso time confere os dados em até 1 dia útil e avisa por WhatsApp. Enquanto isso, você navega normalmente.</div></div>
+          <h2 style="font-size:1.6rem;margin-bottom:.8rem">O que é liberado após a validação</h2>
+          <div class="checklist">
+            <div class="ck ok" style="cursor:default"><span class="box" id="k1"></span><span class="t">Navegação completa e Radar<small>já disponível</small></span><span class="who">Nível 1</span></div>
+            <div class="ck" style="cursor:default"><span class="box"></span><span class="t">Registrar ofertas nas Janelas<small>após validação</small></span><span class="who">Nível 2</span></div>
+            <div class="ck" style="cursor:default"><span class="box"></span><span class="t">Cadastrar lotes no Catálogo de Oportunidades<small>após validação</small></span><span class="who">Nível 2</span></div>
+            <div class="ck" style="cursor:default"><span class="box"></span><span class="t">Negociar com condução assistida<small>após validação</small></span><span class="who">Nível 2</span></div>
+          </div>
+          <div class="row" style="margin-top:1.4rem"><a class="btn btn--primary btn--lg" href="conta.html">Ir para a Área do Cliente</a><a class="btn btn--ghost btn--lg" href="janelas.html">Ver Janelas</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  ['c1','c2','c3','c4','c5','c6','k1','okIc'].forEach(function (id) { document.getElementById(id).innerHTML = I.check; });
+  document.getElementById('s3ic').innerHTML = I.clock;
+
+  var qs = new URLSearchParams(location.search), next = qs.get('next');
+  if (next) document.getElementById('goNext').href = next;
+
+  function show(step) {
+    ['f1','s1ok','f2','s3'].forEach(function (id) { document.getElementById(id).style.display = 'none'; });
+    var map = { 1: 'f1', '1ok': 's1ok', 2: 'f2', 3: 's3' };
+    var el = document.getElementById(map[step]); el.style.display = (map[step] === 'f1' || map[step] === 'f2') ? 'flex' : 'block';
+    var n = step === '1ok' ? 1 : step;
+    document.querySelectorAll('#stepper .s').forEach(function (s) { var k = +s.dataset.s; s.classList.toggle('active', k === n); s.classList.toggle('done', k < n); });
+    document.querySelectorAll('#stepper .bar').forEach(function (b, i) { b.classList.toggle('done', i + 1 < n); });
+    document.getElementById('lv1').classList.toggle('current', n === 1);
+    document.getElementById('lv2').classList.toggle('current', n >= 2);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  var lv = EBSession.level;
+  if (qs.get('step') === '2' || lv === 'inicial') show(2);
+  else if (lv === 'pendente') show(3);
+  else show(1);
+
+  document.getElementById('f1').addEventListener('submit', function (e) {
+    e.preventDefault();
+    EBSession.level = 'inicial'; EBSession.name = document.getElementById('nome').value || 'Pecuarista';
+    show('1ok');
+  });
+  document.getElementById('goStep2').addEventListener('click', function () { show(2); });
+  document.getElementById('f2').addEventListener('submit', function (e) {
+    e.preventDefault(); EBSession.level = 'pendente'; show(3);
+  });
+  EBDemoBar();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM EB Agro — Clientes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="crm">
+  <main class="crm-main">
+    <div class="row between" style="margin-bottom:1rem">
+      <div class="chips" style="margin:0" id="chips">
+        <button class="chip active" data-f="all">Todos</button>
+        <button class="chip" data-f="inicial">Cadastro inicial</button>
+        <button class="chip" data-f="pendente">Aguardando validação</button>
+        <button class="chip" data-f="validado">Validados</button>
+        <button class="chip" data-f="late">Fora do SLA</button>
+      </div>
+      <input class="input" placeholder="Buscar cliente, município…" style="width:260px" id="q">
+    </div>
+    <div class="tbl-wrap"><table class="tbl" id="tb"></table></div>
+    <div class="grid-2 mt">
+      <div class="notice notice--info small"><span id="n1"></span><div><b>Encarteiramento único.</b> A carteira é unificada entre EB Leilões e EB Agro: a comissão vai para o comercial responsável pelo cliente, reciprocamente entre as duas operações.</div></div>
+      <div class="notice notice--gold small"><span id="n2"></span><div><b>Validação do cadastro completo:</b> régua de até 1 dia útil. Validar libera oferta, cadastro de lote e negociação para o cliente.</div></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  EBMountCrm('clientes', 'Clientes', 'Cadastro em 2 níveis · carteira unificada EB Leilões / EB Agro · SLA de contato');
+  document.getElementById('n1').innerHTML = I.info; document.getElementById('n2').innerHTML = I.clock;
+  var f = 'all', q = '';
+  function render() {
+    var list = EBClientes.filter(function (c) {
+      if (f === 'late' && c.sla !== 'late') return false;
+      if (['inicial','pendente','validado'].indexOf(f) >= 0 && c.nivel !== f) return false;
+      if (q && (c.nome + c.contato + c.mun).toLowerCase().indexOf(q) < 0) return false;
+      return true;
+    });
+    document.getElementById('tb').innerHTML = '<thead><tr><th>Cliente</th><th>Município · região</th><th>Perfil · categoria</th><th>Nível</th><th>Carteira</th><th>Responsável</th><th>Último contato</th><th></th></tr></thead><tbody>' +
+      list.map(function (c, i) {
+        return '<tr><td class="b">' + c.nome + '<span class="sub">' + c.contato + '</span></td><td class="small">' + c.mun + '<span class="sub">' + c.regiao + '</span></td><td class="small">' + c.perfil + '<span class="sub">' + c.cat + '</span></td><td>' + EBStatus(c.nivel) + '</td><td class="small">' + c.carteira + '</td><td class="small">' + c.resp + '</td><td class="small"><span class="sla ' + c.sla + '" style="font-weight:700;color:' + (c.sla === 'late' ? '#9B2C2C' : 'var(--green-deep)') + '">' + c.ultimo + '</span></td><td class="r">' + (c.nivel === 'pendente' ? '<button class="btn btn--primary" data-v="' + c.nome + '" style="padding:.45rem .9rem;font-size:.82rem">Validar</button>' : '<a class="link-arrow small" href="#">abrir ' + I.arrow + '</a>') + '</td></tr>';
+      }).join('') + '</tbody>';
+  }
+  document.getElementById('chips').addEventListener('click', function (e) { var c = e.target.closest('.chip'); if (!c) return; this.querySelectorAll('.chip').forEach(function (x) { x.classList.remove('active'); }); c.classList.add('active'); f = c.dataset.f; render(); });
+  document.getElementById('q').addEventListener('input', function () { q = this.value.toLowerCase(); render(); });
+  document.getElementById('tb').addEventListener('click', function (e) { var b = e.target.closest('button[data-v]'); if (!b) return; var c = EBClientes.filter(function (x) { return x.nome === b.dataset.v; })[0]; c.nivel = 'validado'; c.ultimo = 'agora'; c.sla = 'ok'; render(); });
+  render();
+});
+</script>
+</body>
+</html>

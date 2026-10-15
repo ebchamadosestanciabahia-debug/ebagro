@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM EB Agro — Funis comerciais</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="crm">
+  <main class="crm-main">
+    <div class="kpis" style="margin-bottom:1.2rem">
+      <div class="kpi"><div class="l">Leads hoje</div><div class="v">7</div><div class="d">4 compradores · 3 vendedores</div></div>
+      <div class="kpi kpi--navy"><div class="l">Dentro do SLA</div><div class="v">96%</div><div class="d down">2 fora do prazo</div></div>
+      <div class="kpi kpi--gold"><div class="l">Ativados p/ Janelas</div><div class="v">21</div><div class="d">esta semana</div></div>
+      <div class="kpi"><div class="l">Fechados no mês</div><div class="v">3</div><div class="d up">R$ 1,2 mi negociados</div></div>
+    </div>
+
+    <div class="card">
+      <div class="tabs" style="margin-bottom:1.2rem">
+        <button class="active" data-tab="c">Funil de compradores</button>
+        <button data-tab="v">Funil de vendedores</button>
+      </div>
+      <div class="tab-panel active" data-tab="c"><div class="kanban" id="kc"></div></div>
+      <div class="tab-panel" data-tab="v"><div class="kanban" id="kv"></div></div>
+      <div class="notice notice--info small mt"><span id="nI"></span><div><b>Regra do funil:</b> todo lead, contato, interessado, oferta, fechamento e motivo de perda é registrado aqui — 100% dos eventos críticos desde o MVP. SLA: contato no mesmo dia útil (até 2h em leads digitais/prioritários).</div></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  EBMountCrm('funil', 'Funis comerciais', 'Compradores e vendedores · registro integral no CRM · SLA de contato');
+  document.getElementById('nI').innerHTML = I.info;
+  function kanban(id, data) {
+    document.getElementById(id).innerHTML = Object.keys(data).map(function (col) {
+      return '<div class="kcol"><h4>' + col + '<span>' + data[col].length + '</span></h4>' + data[col].map(function (c) {
+        return '<div class="kcard"><b>' + c.t + '</b><span class="muted">' + c.m + '/MT</span><div class="m"><span>' + c.d + '</span><span class="sla ' + c.sla + '">' + (c.sla === 'ok' ? 'no SLA' : 'fora do SLA') + '</span></div></div>';
+      }).join('') + '</div>';
+    }).join('');
+  }
+  kanban('kc', EBFunilCompradores); kanban('kv', EBFunilVendedores);
+  EBTabs();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Catálogo de Oportunidades</title>
+<meta name="description" content="Lotes em pré-cadastro por até 10 dias. Registre seu interesse — se houver demanda suficiente, o lote migra para uma Janela de Ofertas.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <section class="page-head">
+    <div id="phContour"></div>
+    <div class="wrap">
+      <span class="eyebrow">Catálogo de Oportunidades</span>
+      <h1>Lotes em pré-cadastro, por até 10 dias.</h1>
+      <p>Aqui não há oferta formal. Você registra <b>interesse</b>; nós medimos a demanda e, se houver compradores suficientes, o lote é validado e migra para uma <a href="janelas.html" style="color:var(--green);font-weight:600">Janela de Ofertas</a>.</p>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap-wide">
+      <div class="notice notice--gold" id="gateNotice" style="margin-bottom:1.6rem;display:none">
+        <span id="gateIc"></span>
+        <div><b>Você está navegando como visitante.</b> Faça o <a href="cadastrar.html" style="font-weight:700;text-decoration:underline">cadastro inicial</a> (1 minuto) para registrar interesse e acessar o Radar de Mercado.</div>
+      </div>
+
+      <div class="market-bar">
+        <div class="chips" style="margin:0" id="chips">
+          <button class="chip active" data-f="all">Todas</button>
+          <button class="chip" data-f="ativa">Medindo interesse</button>
+          <button class="chip" data-f="em-analise">Em análise</button>
+          <button class="chip" data-f="migrada">Migraram p/ Janela</button>
+          <button class="chip" data-f="Sul">Região Sul</button>
+          <button class="chip" data-f="Baixada">Baixada</button>
+          <button class="chip" data-f="Guaporé">Guaporé</button>
+        </div>
+        <span class="count"><b id="cnt">0</b> oportunidades</span>
+      </div>
+
+      <div class="lot-grid" id="grid"></div>
+
+      <div class="grid-3 mt-lg">
+        <div class="card"><h3 style="margin-bottom:.4rem">Como funciona</h3><p class="small muted">O vendedor pré-cadastra o lote. A EB Agro analisa e publica por <b>no máximo 10 dias</b>. Sem preço de oferta nesta etapa.</p></div>
+        <div class="card"><h3 style="margin-bottom:.4rem">Por que registrar interesse?</h3><p class="small muted">Interesse real alimenta o módulo de Pré-venda: você entra na lista de compradores mapeados e é <b>ativado antes</b> da Janela abrir.</p></div>
+        <div class="card"><h3 style="margin-bottom:.4rem">O que acontece depois</h3><p class="small muted">Com demanda suficiente, o lote passa pelo checklist (filmado, pesado, validado, preço calibrado) e ganha data de Janela.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight cta-band">
+    <div class="wrap">
+      <div class="cta-card">
+        <div><h2 style="color:#fff;font-size:clamp(1.6rem,3vw,2.4rem)">Tem lote para vender?</h2><p>Pré-cadastre no Catálogo. Requer cadastro completo validado.</p></div>
+        <div class="cta-actions"><a class="btn btn--light btn--lg" href="cadastrar-lote.html">Cadastrar lote</a></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  var ph = document.getElementById('phContour'); ph.innerHTML = EBContour(); ph.className = 'contour';
+  document.getElementById('gateIc').innerHTML = I.info;
+  if (EBSession.level === 'visitante') document.getElementById('gateNotice').style.display = 'flex';
+
+  var grid = document.getElementById('grid');
+  function render(f) {
+    var list = EBOportunidades.filter(function (o) {
+      if (f === 'all') return true;
+      if (['Sul','Baixada','Guaporé'].indexOf(f) >= 0) return o.regiao === f;
+      return o.status === f;
+    });
+    grid.innerHTML = list.map(EBOpCard).join('');
+    document.getElementById('cnt').textContent = list.length;
+  }
+  document.getElementById('chips').addEventListener('click', function (e) {
+    var c = e.target.closest('.chip'); if (!c) return;
+    this.querySelectorAll('.chip').forEach(function (x) { x.classList.remove('active'); }); c.classList.add('active');
+    render(c.dataset.f);
+  });
+  render('all');
+
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.btn--interest'); if (!b) return;
+    if (EBSession.level === 'visitante') { location.href = 'cadastrar.html?next=oportunidades.html'; return; }
+    b.classList.toggle('is-on');
+    b.innerHTML = b.classList.contains('is-on') ? I.check + ' Interesse registrado' : I.heart + ' Tenho interesse';
+  });
+
+  EBDemoBar();
+});
+</script>
+</body>
+</html>

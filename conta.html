@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Área do Cliente</title>
+<meta name="description" content="Área do Cliente Pecuarista: conta única para compra e venda — ofertas, lotes, interesses, negociações e pós-venda.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <section class="section section--tight">
+    <div class="wrap-wide">
+      <div class="acct-head">
+        <div class="id"><div class="av" id="av">JA</div><div><span class="eyebrow">Área do Cliente Pecuarista</span><h1 id="nome">—</h1><div class="meta row"><span id="lvStatus"></span><span>· Conta única para compra e venda</span></div></div></div>
+        <div class="row" id="acts"></div>
+      </div>
+
+      <div id="lvNotice"></div>
+
+      <div class="tabs" id="tabs">
+        <button class="active" data-tab="v">Visão geral</button>
+        <button data-tab="o">Minhas ofertas</button>
+        <button data-tab="l">Meus lotes</button>
+        <button data-tab="i">Meus interesses</button>
+        <button data-tab="n">Negociações & pós-venda</button>
+        <button data-tab="c">Meu cadastro</button>
+      </div>
+
+      <!-- VISÃO GERAL -->
+      <div class="tab-panel active" data-tab="v">
+        <div class="kpis">
+          <div class="kpi"><div class="l">Ofertas em condução</div><div class="v">2</div><div class="d">JAN-0924 · JAN-0919</div></div>
+          <div class="kpi kpi--gold"><div class="l">Lotes meus em Janela</div><div class="v">1</div><div class="d">Lote 0224 · aberta hoje</div></div>
+          <div class="kpi kpi--navy"><div class="l">Interesses registrados</div><div class="v">3</div><div class="d">1 migrou p/ Janela</div></div>
+          <div class="kpi"><div class="l">Negócios fechados</div><div class="v">1</div><div class="d up">JAN-0917 · R$ 17,10/kg</div></div>
+        </div>
+        <div class="grid-32 mt">
+          <div class="card"><h3>Janelas em que você está ativado <a href="janelas.html">ver todas</a></h3><div id="ativado" style="display:flex;flex-direction:column;gap:.8rem"></div></div>
+          <div class="card"><h3>Seu consultor</h3>
+            <div class="row" style="margin-bottom:1rem"><span class="av" style="width:48px;height:48px;border-radius:50%;background:var(--green);color:#fff;display:grid;place-items:center;font-weight:700">CM</span><div><b class="navy">Carlos M.</b><div class="small muted">Consultor EB Agro · Baixada</div></div></div>
+            <p class="small muted">SLA de contato: mesmo dia útil (até 2h em leads prioritários). Ele conduz suas ofertas até o aceite.</p>
+            <a class="btn btn--navy btn--block" href="https://wa.me/5565999968158" id="waC" style="margin-top:1rem">Falar no WhatsApp</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- OFERTAS -->
+      <div class="tab-panel" data-tab="o">
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Janela</th><th>Lote</th><th class="r">Sua oferta</th><th class="r">Melhor oferta</th><th>Status</th><th>Consultor</th><th></th></tr></thead><tbody id="tbO"></tbody></table></div>
+        <div class="notice notice--info mt"><span id="nI1"></span><div><b>Como funciona o aceite.</b> Sua oferta é conduzida pelo consultor junto ao vendedor. Se aceita, você recebe a confirmação por WhatsApp e o fluxo segue para Acertos EB (pagamento à vista).</div></div>
+      </div>
+
+      <!-- LOTES -->
+      <div class="tab-panel" data-tab="l">
+        <div class="row between" style="margin-bottom:1rem"><p class="muted small">Lotes que você cadastrou como vendedor.</p><a class="btn btn--primary" href="cadastrar-lote.html" id="btnNovoLote">Cadastrar novo lote</a></div>
+        <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Lote</th><th>Etapa</th><th class="r">Interessados / Ofertas</th><th>Validação</th><th>Próximo passo</th><th></th></tr></thead><tbody id="tbL"></tbody></table></div>
+      </div>
+
+      <!-- INTERESSES -->
+      <div class="tab-panel" data-tab="i">
+        <div class="lot-grid" id="ints"></div>
+      </div>
+
+      <!-- NEGOCIAÇÕES -->
+      <div class="tab-panel" data-tab="n">
+        <div class="grid-32">
+          <div class="card">
+            <h3>JAN-0917 · 40 Machos Brahmanel <span class="status status--ok">Fechado · R$ 17,10/kg</span></h3>
+            <div class="checklist">
+              <div class="ck ok" style="cursor:default"><span class="box">✓</span><span class="t">Oferta aceita (condução assistida)<small>17/09 · 16:40 · Carlos M.</small></span><span class="who">Plataforma</span></div>
+              <div class="ck ok" style="cursor:default"><span class="box">✓</span><span class="t">Dados enviados ao setor de Acertos EB<small>17/09 · 16:41 · automático</small></span><span class="who">Acertos EB</span></div>
+              <div class="ck ok" style="cursor:default"><span class="box">✓</span><span class="t">Pagamento à vista confirmado<small>18/09 · 10:05</small></span><span class="who">Financeiro</span></div>
+              <div class="ck" style="cursor:default"><span class="box"></span><span class="t">Documentação e GTA<small>em andamento</small></span><span class="who">Vendedor</span></div>
+              <div class="ck" style="cursor:default"><span class="box"></span><span class="t">Retirada / transporte<small>a agendar</small></span><span class="who">Logística</span></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>Pós-venda</h3>
+            <p class="small muted">Como foi negociar pela EB Agro? Sua resposta alimenta nosso indicador de NPS.</p>
+            <div class="row" style="margin:1rem 0;gap:.4rem" id="nps"></div>
+            <textarea class="textarea" placeholder="Comentário (opcional, uso interno)" style="min-height:90px"></textarea>
+            <button class="btn btn--ghost btn--block" style="margin-top:.8rem">Enviar avaliação</button>
+            <p class="hint" style="margin-top:.6rem">Avaliações não são exibidas publicamente.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- CADASTRO -->
+      <div class="tab-panel" data-tab="c">
+        <div class="grid-2">
+          <div class="level" id="lv1c"><h4><span>Nível 1 · Cadastro inicial</span><span class="status status--ok">concluído</span></h4><ul><li>João Almeida</li><li>(65) 99999-0000 · joao@fazendasantaluzia.com.br</li><li>Rosário Oeste/MT</li></ul></div>
+          <div class="level" id="lv2c"><h4><span>Nível 2 · Cadastro completo</span><span id="lv2s"></span></h4><ul><li>Fazenda Santa Luzia · IE 13.xxx.xxx-x</li><li>Região: Baixada (MT)</li><li>Categorias: Corte · Machos 180–260 kg</li></ul><div id="lv2act" style="margin-top:1rem"></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  var lv = EBSession.level;
+  if (lv === 'visitante') { location.href = 'login.html'; return; }
+  var nome = EBSession.name;
+  document.getElementById('nome').textContent = nome;
+  document.getElementById('av').textContent = nome.split(' ').map(function (p) { return p[0]; }).slice(0, 2).join('').toUpperCase();
+  document.getElementById('lvStatus').innerHTML = EBStatus(lv);
+  document.getElementById('waC').insertAdjacentHTML('afterbegin', I.whatsapp);
+  document.getElementById('nI1').innerHTML = I.info;
+
+  // Ações e avisos por nível
+  var acts = document.getElementById('acts'), nt = document.getElementById('lvNotice');
+  if (lv === 'inicial') {
+    acts.innerHTML = '<a class="btn btn--primary" href="cadastrar.html?step=2">Completar cadastro</a><a class="btn btn--ghost" href="janelas.html">Ver Janelas</a>';
+    nt.innerHTML = '<div class="notice notice--gold" style="margin-bottom:1.5rem"><span>' + I.lock + '</span><div><b>Você está no cadastro inicial.</b> Para registrar ofertas e cadastrar lotes, complete o cadastro (validação EB Agro em até 1 dia útil).</div></div>';
+  } else if (lv === 'pendente') {
+    acts.innerHTML = '<a class="btn btn--ghost" href="janelas.html">Ver Janelas</a>';
+    nt.innerHTML = '<div class="notice notice--warn" style="margin-bottom:1.5rem"><span>' + I.clock + '</span><div><b>Cadastro completo em validação.</b> Nosso time confere seus dados e avisa por WhatsApp. Ofertas e cadastro de lote são liberados na sequência.</div></div>';
+  } else {
+    acts.innerHTML = '<a class="btn btn--primary" href="cadastrar-lote.html">Cadastrar lote</a><a class="btn btn--ghost" href="janelas.html">Ver Janelas</a>';
+  }
+  document.getElementById('lv2s').innerHTML = lv === 'validado' ? '<span class="status status--ok">validado</span>' : lv === 'pendente' ? '<span class="status status--warn">em validação</span>' : '<span class="status status--neutral">não iniciado</span>';
+  document.getElementById('lv2act').innerHTML = lv === 'inicial' ? '<a class="btn btn--primary" href="cadastrar.html?step=2">Completar agora</a>' : '';
+  document.getElementById('lv2c').classList.toggle('current', lv === 'validado');
+  if (lv !== 'validado') document.getElementById('btnNovoLote').classList.add('is-locked');
+
+  // Janelas em que está ativado
+  document.getElementById('ativado').innerHTML = EBJanelas.filter(function (j) { return ['aberta','pre-abertura','fechamento'].indexOf(j.status) >= 0; }).map(function (j) {
+    return '<a class="row between" href="janela.html?janela=' + j.id + '" style="padding:.8rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--paper)"><div><b class="navy">' + j.id + '</b> · ' + j.title + '<div class="small muted">' + j.loc + ' · ' + j.data + '</div></div>' + EBStatus(j.status) + '</a>';
+  }).join('');
+
+  // Ofertas
+  var minhas = [
+    { j: EBJanelas[0], oferta: '16,80', st: 'em-conducao' },
+    { j: EBJanelas[3], oferta: '17,40', st: 'enviada' },
+    { j: EBJanelas[4], oferta: '17,10', st: 'aceita' },
+    { j: EBJanelas[5], oferta: '17,60', st: 'recusada' },
+  ];
+  document.getElementById('tbO').innerHTML = minhas.map(function (m) {
+    return '<tr><td class="b">' + m.j.id + '<span class="sub">' + m.j.data + '</span></td><td>' + m.j.title + '<span class="sub">' + m.j.loc + '</span></td><td class="r b">R$ ' + m.oferta + '</td><td class="r">R$ ' + (m.j.melhor || '—') + '</td><td>' + EBStatus(m.st) + '</td><td>' + m.j.resp + '</td><td class="r"><a class="link-arrow" href="janela.html?janela=' + m.j.id + '">abrir ' + I.arrow + '</a></td></tr>';
+  }).join('');
+
+  // Lotes (vendedor)
+  var lotes = [
+    { id: 'Lote 0224', etapa: 'Em Janela · JAN-0924', n: '4 ofertas', ck: [1,1,1], prox: 'Consultor conduz o aceite hoje até 18h', href: 'janela.html?janela=JAN-0924', st: 'aberta' },
+    { id: 'OP-123', etapa: 'Catálogo · em análise', n: '0 interessados', ck: [0,0,0], prox: 'Validação EB Agro (até 1 dia útil)', href: 'janela.html?op=OP-123', st: 'em-analise' },
+    { id: 'OP-109', etapa: 'Migrou p/ Janela JAN-0926', n: '12 interessados', ck: [1,1,0], prox: 'Pré-demanda: mapeando compradores', href: 'janela.html?janela=JAN-0926', st: 'migrada' },
+  ];
+  document.getElementById('tbL').innerHTML = lotes.map(function (l) {
+    return '<tr><td class="b">' + l.id + '</td><td>' + EBStatus(l.st) + '<span class="sub">' + l.etapa + '</span></td><td class="r">' + l.n + '</td><td>' + EBVBadges(l.ck) + '</td><td class="small">' + l.prox + '</td><td class="r"><a class="link-arrow" href="' + l.href + '">abrir ' + I.arrow + '</a></td></tr>';
+  }).join('');
+
+  // Interesses
+  document.getElementById('ints').innerHTML = [EBOportunidades[0], EBOportunidades[2], EBOportunidades[4]].map(function (o, i) { return EBOpCard(o, i); }).join('');
+  document.querySelectorAll('#ints .btn--interest').forEach(function (b) { b.classList.add('is-on'); b.innerHTML = I.check + ' Interesse registrado'; });
+
+  // NPS
+  var nps = document.getElementById('nps');
+  for (var i = 0; i <= 10; i++) nps.insertAdjacentHTML('beforeend', '<button class="chip" style="padding:.4rem .7rem">' + i + '</button>');
+  nps.addEventListener('click', function (e) { var c = e.target.closest('.chip'); if (!c) return; nps.querySelectorAll('.chip').forEach(function (x) { x.classList.remove('active'); }); c.classList.add('active'); });
+
+  EBTabs();
+  EBDemoBar();
+});
+</script>
+</body>
+</html>

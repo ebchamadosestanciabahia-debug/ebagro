@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Entrar</title>
+<meta name="description" content="Acesse sua conta EB Agro e comece a comprar e vender lotes de bovinos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <div class="auth">
+    <!-- ASIDE -->
+    <div class="auth-aside">
+      <div class="auth-logo"><img src="assets/eb-agro-logo.png" alt="EB Agro"></div>
+      <div class="auth-copy">
+        <p class="quote">"A tecnologia organiza. A confiança sustenta."</p>
+        <p>Bem-vindo de volta. Acesse sua conta para acompanhar Janelas, ofertas e negociações — com a segurança que você já conhece.</p>
+      </div>
+      <div class="auth-badges">
+        <span class="auth-badge" id="ab1">100% online</span>
+        <span class="auth-badge" id="ab2">Transparente</span>
+        <span class="auth-badge" id="ab3">Palavra firme</span>
+      </div>
+    </div>
+
+    <!-- FORM -->
+    <div class="auth-main">
+      <div class="auth-form">
+        <span class="eyebrow">Acesse sua conta</span>
+        <h1 style="font-size:clamp(1.9rem,3.5vw,2.6rem);margin:1rem 0 .5rem">Entrar</h1>
+        <p style="color:var(--muted);margin-bottom:2rem">Ainda não tem conta? <a href="cadastrar.html" style="color:var(--green);font-weight:600">Cadastre-se</a></p>
+
+        <form id="loginForm" style="display:flex;flex-direction:column;gap:1.2rem">
+          <div class="field"><label>E-mail ou CPF <span class="req">*</span></label><input class="input" type="text" required placeholder="voce@email.com"></div>
+          <div class="field">
+            <label>Senha <span class="req">*</span></label>
+            <input class="input" type="password" required placeholder="••••••••">
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.5rem">
+            <label class="checkbox"><input type="checkbox"> Lembrar de mim</label>
+            <a href="#" style="color:var(--green);font-weight:600;font-size:.9rem">Esqueceu sua senha?</a>
+          </div>
+          <button class="btn btn--primary btn--lg btn--block" type="submit">Entrar</button>
+        </form>
+
+        <div class="divider">ou</div>
+        <a class="btn btn--ghost btn--block" href="cadastrar.html">Criar uma conta e começar a comprar</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  document.getElementById('ab1').insertAdjacentHTML('afterbegin', I.speed);
+  document.getElementById('ab2').insertAdjacentHTML('afterbegin', I.shield);
+  document.getElementById('ab3').insertAdjacentHTML('afterbegin', I.handshake);
+  document.getElementById('loginForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var b = this.querySelector('button');
+    b.textContent = 'Entrando...';
+    try { if (!localStorage.getItem('eb_level') || localStorage.getItem('eb_level') === 'visitante') localStorage.setItem('eb_level', 'validado'); } catch (err) {}
+    setTimeout(function () { location.href = 'conta.html'; }, 700);
+  });
+});
+</script>
+</body>
+</html>

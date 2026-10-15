@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Quero Comprar / Vender</title>
+<meta name="description" content="Envie sua mensagem e comece a comprar ou vender lotes de bovinos na EB Agro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <section class="section">
+    <div class="wrap-wide" style="display:grid;grid-template-columns:.85fr 1.15fr;gap:clamp(2rem,5vw,4.5rem);align-items:start">
+      <!-- LADO ESQUERDO -->
+      <div style="position:sticky;top:98px">
+        <span class="eyebrow reveal">Comece agora</span>
+        <h1 class="display reveal" data-delay="1" style="font-size:clamp(2.4rem,5vw,3.8rem);margin:1.2rem 0 1.2rem">Envie sua mensagem e comece a <em>negociar.</em></h1>
+        <p class="lede reveal" data-delay="2">Quer comprar com confiança ou vender bem? Preencha os dados abaixo — nosso time entra em contato com o ritmo que o negócio exige.</p>
+
+        <div class="reveal" data-delay="3" style="margin-top:2.5rem;display:flex;flex-direction:column;gap:1.2rem">
+          <div style="display:flex;gap:.9rem;align-items:flex-start">
+            <span style="width:44px;height:44px;border-radius:10px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;flex-shrink:0" id="c1"></span>
+            <div><b style="color:var(--navy);display:block">Palavra firme</b><span style="color:var(--muted);font-size:.92rem">Negociação transparente, do primeiro contato ao fechamento.</span></div>
+          </div>
+          <div style="display:flex;gap:.9rem;align-items:flex-start">
+            <span style="width:44px;height:44px;border-radius:10px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;flex-shrink:0" id="c2"></span>
+            <div><b style="color:var(--navy);display:block">100% online</b><span style="color:var(--muted);font-size:.92rem">Rápido, seguro e sem burocracia desnecessária.</span></div>
+          </div>
+          <div style="display:flex;gap:.9rem;align-items:flex-start">
+            <span style="width:44px;height:44px;border-radius:10px;background:var(--green-soft);color:var(--green);display:grid;place-items:center;flex-shrink:0" id="c3"></span>
+            <div><b style="color:var(--navy);display:block">Suporte de quem entende</b><span style="color:var(--muted);font-size:.92rem">Uma rede de serviços pecuários que puxa junto com você.</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FORMULÁRIO -->
+      <div class="hero-card reveal" data-delay="2" style="padding:clamp(1.6rem,3vw,2.6rem)">
+        <div style="margin-bottom:1.6rem">
+          <span style="font-size:.82rem;font-weight:700;color:var(--navy);letter-spacing:.02em">Tenho interesse em</span>
+          <div style="margin-top:.6rem">
+            <div class="segment" style="width:100%">
+              <button type="button" class="active" data-value="Comprar" style="flex:1">Comprar</button>
+              <button type="button" data-value="Vender" style="flex:1">Vender</button>
+            </div>
+            <input type="hidden" id="interesse" value="Comprar">
+          </div>
+        </div>
+
+        <form id="cvForm" class="stack" style="display:flex;flex-direction:column;gap:1.1rem">
+          <div class="field-row">
+            <div class="field"><label>Nome completo <span class="req">*</span></label><input class="input" type="text" required placeholder="Seu nome"></div>
+            <div class="field"><label>Telefone / WhatsApp <span class="req">*</span></label><input class="input" type="tel" required placeholder="(00) 00000-0000"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>E-mail</label><input class="input" type="email" placeholder="voce@email.com"></div>
+            <div class="field"><label>Estado <span class="req">*</span></label>
+              <select class="select" required>
+                <option value="">Selecione</option>
+                <option>MT</option><option>MS</option><option>GO</option><option>SP</option>
+                <option>MG</option><option>BA</option><option>PA</option><option>Outro</option>
+              </select>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Raça de interesse</label>
+              <select class="select">
+                <option value="">Todas</option>
+                <option>Nelore</option><option>Brangus</option><option>Senepol</option>
+                <option>½ Aberdeen Angus</option><option>Brahmanel</option><option>Anelorado</option>
+                <option>Cruzamento Industrial</option><option>Nelore P.O</option>
+              </select>
+            </div>
+            <div class="field"><label>Quantidade estimada</label><input class="input" type="text" placeholder="Ex.: 30 cabeças"></div>
+          </div>
+          <div class="field"><label>Mensagem</label><textarea class="textarea" placeholder="Conte um pouco sobre o que você procura..."></textarea></div>
+          <label class="checkbox"><input type="checkbox" required> Aceito ser contatado e concordo com os termos.</label>
+          <button class="btn btn--primary btn--lg btn--block" type="submit">Enviar mensagem</button>
+          <p class="hint" style="text-align:center">Resposta em horário comercial. Seus dados estão seguros.</p>
+        </form>
+
+        <div id="cvSuccess" style="display:none;text-align:center;padding:2rem 0">
+          <div style="width:70px;height:70px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;margin:0 auto 1.2rem" id="okIc"></div>
+          <h3 style="font-size:1.6rem">Mensagem enviada!</h3>
+          <p style="color:var(--muted);margin-top:.5rem">Recebemos seu interesse. Nosso time entra em contato em breve.</p>
+          <a class="btn btn--ghost" href="lotes.html" style="margin-top:1.5rem">Ver lotes à venda</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  document.getElementById('c1').innerHTML = I.handshake;
+  document.getElementById('c2').innerHTML = I.speed;
+  document.getElementById('c3').innerHTML = I.shield;
+  document.getElementById('okIc').innerHTML = I.check;
+
+  document.getElementById('cvForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    this.style.display = 'none';
+    document.getElementById('cvSuccess').style.display = 'block';
+  });
+});
+</script>
+</body>
+</html>

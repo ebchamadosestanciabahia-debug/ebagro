@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Radar de Mercado</title>
+<meta name="description" content="Radar de Mercado EB Agro: referência de preço por categoria e região, com dados próprios da Estância Bahia e validação humana.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <section class="page-head">
+    <div id="phContour"></div>
+    <div class="wrap">
+      <div class="row between">
+        <div><span class="eyebrow">Radar de Mercado · piloto interno</span><h1>Referência de preço, com dados de quem negocia.</h1><p>Base própria: histórico da Estância Bahia Leilões + negócios fechados na EB Agro, por categoria e região do piloto. <b>Validação humana. Sem IA e sem fontes externas nesta fase.</b></p></div>
+        <span class="status status--info">Atualizado em <span id="upd" style="margin-left:.3rem"></span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap-wide gate" id="radarGate" style="border-radius:var(--radius-xl)">
+      <div class="kpis">
+        <div class="kpi"><div class="l">Referência MT · Machos 180–260</div><div class="v">R$ 16,90<small style="font-size:.9rem;color:var(--muted)">/kg</small></div><div class="d up">▲ 6,9% em 12 semanas</div></div>
+        <div class="kpi kpi--gold"><div class="l">Genética · Nelore P.O</div><div class="v">R$ 18,97<small style="font-size:.9rem;color:var(--muted)">/kg</small></div><div class="d">média das 3 regiões</div></div>
+        <div class="kpi kpi--navy"><div class="l">Negócios na base</div><div class="v">1.284</div><div class="d">EBL 2024–26 + EB Agro</div></div>
+        <div class="kpi"><div class="l">Validação</div><div class="v" style="font-size:1.35rem;margin-top:.6rem">Humana</div><div class="d">equipe comercial · semanal</div></div>
+      </div>
+
+      <div class="grid-32 mt">
+        <div class="card">
+          <h3>Machos 180–260 kg · R$/kg · últimas 12 semanas <span class="status status--neutral">MT · média</span></h3>
+          <div class="radar-chart" id="line"></div>
+        </div>
+        <div class="card">
+          <h3>Por região · Machos 180–260 kg</h3>
+          <div class="bars" id="regBars"></div>
+          <p class="hint" style="margin-top:1rem">Regiões do piloto: Sul, Baixada e Guaporé (MT).</p>
+        </div>
+      </div>
+
+      <div class="card mt">
+        <h3>Matriz de referência · categoria × região (R$/kg)</h3>
+        <div class="tbl-wrap" style="border:none"><table class="tbl" id="matrix"></table></div>
+      </div>
+
+      <div class="notice notice--info mt"><span id="nI"></span><div><b>Referência interna, não cotação oficial.</b> O Radar orienta a calibração de preço antes de cada Janela e a leitura das ofertas. Automação por IA e fontes externas (CEPEA, Scot etc.) serão avaliadas somente a partir de 2027.</div></div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons, R = EBRadar;
+  var ph = document.getElementById('phContour'); ph.innerHTML = EBContour(); ph.className = 'contour';
+  document.getElementById('upd').textContent = R.atualizado;
+  document.getElementById('nI').innerHTML = I.info;
+
+  if (EBSession.level === 'visitante') {
+    document.getElementById('radarGate').insertAdjacentHTML('afterbegin', '<div class="gate-cover"><span class="lock">' + I.lock + '</span><b>O Radar é liberado com o cadastro inicial</b><p>Nome, WhatsApp, e-mail e município. Leva 1 minuto.</p><a class="btn btn--primary" href="cadastrar.html?next=radar.html">Criar cadastro inicial</a></div>');
+  }
+
+  // Linha (SVG)
+  var W = 640, H = 240, pad = 28, d = R.hist, min = Math.min.apply(null, d) - .3, max = Math.max.apply(null, d) + .3;
+  var x = function (i) { return pad + i * (W - pad * 2) / (d.length - 1); }, y = function (v) { return H - pad - (v - min) / (max - min) * (H - pad * 2); };
+  var path = d.map(function (v, i) { return (i ? 'L' : 'M') + x(i) + ' ' + y(v); }).join(' ');
+  var area = path + ' L' + x(d.length - 1) + ' ' + (H - pad) + ' L' + x(0) + ' ' + (H - pad) + ' Z';
+  var grid = [0, .25, .5, .75, 1].map(function (t) { var v = min + t * (max - min); return '<line x1="' + pad + '" x2="' + (W - pad) + '" y1="' + y(v) + '" y2="' + y(v) + '" stroke="#E1D9CC"/><text x="' + (pad - 6) + '" y="' + (y(v) + 4) + '" font-size="10" text-anchor="end" fill="#8A968C">' + v.toFixed(1).replace('.', ',') + '</text>'; }).join('');
+  var dots = d.map(function (v, i) { return '<circle cx="' + x(i) + '" cy="' + y(v) + '" r="3.5" fill="#fff" stroke="#238246" stroke-width="2"/>'; }).join('');
+  document.getElementById('line').innerHTML = '<svg viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#238246" stop-opacity=".25"/><stop offset="1" stop-color="#238246" stop-opacity="0"/></linearGradient></defs>' + grid + '<path d="' + area + '" fill="url(#g)"/><path d="' + path + '" fill="none" stroke="#238246" stroke-width="2.5" stroke-linejoin="round"/>' + dots + '<text x="' + x(d.length - 1) + '" y="' + (y(d[d.length - 1]) - 10) + '" font-size="12" font-weight="700" text-anchor="end" fill="#002846">R$ ' + d[d.length - 1].toFixed(2).replace('.', ',') + '</text></svg>';
+
+  // Barras por região
+  document.getElementById('regBars').innerHTML = Object.keys(R.series).map(function (reg, i) { var v = R.series[reg][0]; return '<div class="bar-row"><span class="lab">' + reg + '</span><div class="track"><div class="fill ' + ['', 'gold', 'navy'][i] + '" style="width:' + (v / 20 * 100) + '%"></div></div><span class="num">' + v.toFixed(2).replace('.', ',') + '</span></div>'; }).join('');
+
+  // Matriz
+  var regs = Object.keys(R.series);
+  document.getElementById('matrix').innerHTML = '<thead><tr><th>Categoria</th>' + regs.map(function (r) { return '<th class="r">' + r + '</th>'; }).join('') + '<th class="r">Média</th><th>Validado por</th></tr></thead><tbody>' +
+    R.categorias.map(function (c, i) { var vals = regs.map(function (r) { return R.series[r][i]; }); var avg = vals.reduce(function (a, b) { return a + b; }, 0) / vals.length; return '<tr><td class="b">' + c + '</td>' + vals.map(function (v) { return '<td class="r">R$ ' + v.toFixed(2).replace('.', ',') + '</td>'; }).join('') + '<td class="r b">R$ ' + avg.toFixed(2).replace('.', ',') + '</td><td class="small muted">Comercial · ' + R.atualizado + '</td></tr>'; }).join('') + '</tbody>';
+
+  EBDemoBar();
+});
+</script>
+</body>
+</html>

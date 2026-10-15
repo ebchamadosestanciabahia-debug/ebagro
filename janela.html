@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Janela de Ofertas</title>
+<meta name="description" content="Detalhes da Janela de Ofertas: lote validado, preço de referência, ofertas registradas e condução assistida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <div class="wrap-wide">
+    <nav class="breadcrumb">
+      <a href="index.html">Home</a><span id="bc1"></span>
+      <a id="bcList" href="janelas.html">Janelas de Ofertas</a><span id="bc2"></span>
+      <span id="bcCur">—</span>
+    </nav>
+
+    <div id="cycleWrap" class="card" style="margin-bottom:1.5rem;padding:1rem 1.5rem"></div>
+
+    <div class="detail">
+      <!-- COLUNA ESQUERDA -->
+      <div>
+        <div class="gallery-main" id="galMain"></div>
+        <div class="gallery-thumbs" id="galThumbs"></div>
+
+        <div class="detail-info">
+          <div class="info-card">
+            <div class="row between" style="margin-bottom:.8rem"><h3 style="margin:0">Validação do lote</h3><span id="vb"></span></div>
+            <p class="muted small">Todo lote em Janela passou por filmagem, pesagem com método e validação de padrão pela equipe EB Agro. O vídeo e o laudo de pesagem ficam disponíveis para compradores habilitados.</p>
+            <div class="row" style="margin-top:1rem"><a class="btn btn--ghost" id="btnVideo" href="#">Assistir vídeo do lote</a><a class="btn btn--ghost" id="btnLaudo" href="#">Laudo de pesagem</a></div>
+          </div>
+          <div class="info-card">
+            <h3>Ficha técnica</h3>
+            <table class="data-table" id="specTable"></table>
+          </div>
+          <div class="info-card" id="histCard">
+            <h3>Ofertas registradas nesta Janela</h3>
+            <ul class="offers" id="offers"></ul>
+            <p class="hint" style="margin-top:.8rem">Identificação dos compradores é reservada. O consultor responsável conduz cada oferta até o aceite do vendedor.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAINEL DIREITO -->
+      <aside class="detail-panel" id="panel"></aside>
+    </div>
+
+    <section class="section">
+      <div class="sec-head">
+        <div class="txt"><span class="eyebrow">Continue explorando</span><h2 class="title" style="font-size:2rem;margin-top:.7rem">Outras Janelas</h2></div>
+        <a class="link-arrow" href="janelas.html">Ver todas <span id="relArrow"></span></a>
+      </div>
+      <div id="related" style="display:flex;flex-direction:column;gap:1rem"></div>
+    </section>
+  </div>
+</main>
+
+<!-- MODAL confirmação -->
+<div class="modal" id="modal">
+  <div class="box">
+    <span class="eyebrow">Confirmar oferta</span>
+    <h3 style="margin-top:.8rem">Sua oferta será enviada para condução assistida.</h3>
+    <p class="muted small" style="margin:.6rem 0 1.2rem">Não há fechamento automático. O consultor responsável pela Janela recebe sua oferta, registra no CRM e conduz a negociação com o vendedor. Você será avisado por WhatsApp.</p>
+    <div class="offer" style="padding:1rem;margin-bottom:1.2rem" id="modalResumo"></div>
+    <label class="checkbox" style="margin-bottom:1.2rem"><input type="checkbox" id="okTermos"> Li o Regulamento Geral, entendo a taxa de serviço de 2,5% (comprador) e que o pagamento é à vista.</label>
+    <div class="row">
+      <button class="btn btn--primary btn--lg" id="btnConfirm">Confirmar e enviar oferta</button>
+      <button class="btn btn--ghost" id="btnCancel">Voltar</button>
+    </div>
+  </div>
+</div>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  document.getElementById('bc1').innerHTML = I.chev;
+  document.getElementById('bc2').innerHTML = I.chev;
+  document.getElementById('relArrow').innerHTML = I.arrow;
+  document.getElementById('btnVideo').insertAdjacentHTML('afterbegin', I.video);
+  document.getElementById('btnLaudo').insertAdjacentHTML('afterbegin', I.doc);
+
+  var qs = new URLSearchParams(location.search);
+  var opId = qs.get('op'), jId = qs.get('janela');
+  var level = EBSession.level;
+  var panel = document.getElementById('panel');
+
+  /* ---------- Galeria ---------- */
+  document.getElementById('galMain').innerHTML = EBPasture(1);
+  var thumbs = document.getElementById('galThumbs');
+  thumbs.innerHTML = [0,2,1,3].map(function (s, i) { return '<div class="thumb ' + (i === 0 ? 'active' : '') + '" data-s="' + s + '">' + EBPasture(s) + '</div>'; }).join('');
+  thumbs.addEventListener('click', function (e) {
+    var t = e.target.closest('.thumb'); if (!t) return;
+    thumbs.querySelectorAll('.thumb').forEach(function (x) { x.classList.remove('active'); }); t.classList.add('active');
+    document.getElementById('galMain').innerHTML = EBPasture(parseInt(t.dataset.s, 10));
+  });
+
+  function ficha(o, extra) {
+    var rows = [['Código', o.id], ['Quantidade', o.qty + ' ' + (o.sexo === 'Fêmea' ? 'Fêmeas' : 'Machos')], ['Raça', o.raca], ['Categoria', o.cat], ['Peso médio', o.peso + ' kg'], ['Localização', o.loc], ['Região do piloto', o.regiao]].concat(extra || []);
+    document.getElementById('specTable').innerHTML = rows.map(function (r) { return '<tr><td>' + r[0] + '</td><td>' + r[1] + '</td></tr>'; }).join('');
+  }
+
+  function gateCover(msg, cta, href) {
+    return '<div class="gate-cover"><span class="lock">' + I.lock + '</span><b>' + msg + '</b><p>' + cta + '</p><a class="btn btn--primary" href="' + href + '">' + (level === 'visitante' ? 'Criar cadastro inicial' : level === 'inicial' ? 'Completar cadastro' : 'Ver status do cadastro') + '</a></div>';
+  }
+
+  /* ==========================================================
+     MODO OPORTUNIDADE (pré-cadastro, sem oferta)
+     ========================================================== */
+  if (opId) {
+    var o = EBOportunidades.filter(function (x) { return x.id === opId; })[0] || EBOportunidades[0];
+    document.title = 'EB Agro — Oportunidade ' + o.id;
+    document.getElementById('bcList').textContent = 'Catálogo de Oportunidades'; document.getElementById('bcList').href = 'oportunidades.html';
+    document.getElementById('bcCur').textContent = o.id;
+    document.getElementById('cycleWrap').innerHTML = '<div class="row between"><div><span class="eyebrow">Etapa atual</span><h3 style="margin-top:.4rem">Catálogo de Oportunidades — medindo interesse</h3></div>' + EBStatus(o.status) + '</div>';
+    document.getElementById('vb').innerHTML = EBVBadges([0,0,0]);
+    document.querySelector('#galMain').parentElement.querySelector('.info-card p').textContent = 'Esta é uma oportunidade em pré-cadastro. A filmagem, pesagem e validação acontecem apenas se o lote avançar para Janela — nunca antes.';
+    document.getElementById('btnVideo').classList.add('is-locked'); document.getElementById('btnLaudo').classList.add('is-locked');
+    ficha(o, [['Publicado em', o.publicado], ['Prazo no catálogo', '10 dias'], ['Interessados', o.interessados]]);
+    document.getElementById('histCard').style.display = 'none';
+
+    var pct = Math.round(o.restam / 10 * 100);
+    panel.innerHTML =
+      '<span class="lot-code">' + o.id + ' · Oportunidade</span><h1>' + o.title + '</h1>' +
+      '<span class="lot-loc" style="font-size:.95rem">' + I.pin + ' ' + o.loc + '</span>' +
+      '<div style="margin:1.2rem 0">' + EBStatus(o.status) + '</div>' +
+      (o.status === 'ativa' ? '<div class="deadline ' + (o.restam <= 2 ? 'urgent' : '') + '"><div class="track"><div class="fill" style="width:' + pct + '%"></div></div><div class="meta"><span>Prazo máximo: 10 dias</span><span><b>' + o.restam + ' dia(s)</b> restante(s)</span></div></div>' : '') +
+      '<div class="detail-specs">' +
+        '<div class="spec"><span class="ic">' + I.users + '</span><span><span class="k">Interessados</span><span class="v">' + o.interessados + '</span></span></div>' +
+        '<div class="spec"><span class="ic">' + I.price + '</span><span><span class="k">Preço</span><span class="v">Sem oferta</span></span></div>' +
+      '</div>' +
+      '<div class="notice notice--gold small"><span>' + I.info + '</span><div><b>Sem oferta nesta etapa.</b> Registrar interesse coloca você na lista de compradores mapeados da Pré-venda. Se houver demanda, o lote é validado e ganha data de Janela — e você é ativado antes da abertura.</div></div>' +
+      '<div class="detail-actions">' +
+        (o.status === 'ativa'
+          ? (level === 'visitante'
+              ? '<a class="btn btn--primary btn--lg btn--block" href="cadastrar.html?next=janela.html?op=' + o.id + '">Criar cadastro inicial para registrar interesse</a>'
+              : '<button class="btn btn--primary btn--lg btn--block btn--interest" id="btnInt">' + I.heart + ' Tenho interesse neste lote</button>')
+          : o.status === 'migrada' ? '<a class="btn btn--primary btn--lg btn--block" href="janela.html?janela=' + o.janela + '">Ir para a Janela ' + o.janela + '</a>'
+          : '<button class="btn btn--ghost btn--block" disabled>Indisponível</button>') +
+        '<a class="btn btn--navy btn--block" href="https://wa.me/5565999968158">' + I.whatsapp + ' Falar com um consultor</a>' +
+      '</div>' +
+      '<div class="assurance">' + I.shield + ' Interesse registrado no CRM · sem compromisso</div>';
+    var bi = document.getElementById('btnInt');
+    if (bi) bi.addEventListener('click', function () { this.classList.toggle('is-on'); this.innerHTML = this.classList.contains('is-on') ? I.check + ' Interesse registrado — você será ativado' : I.heart + ' Tenho interesse neste lote'; });
+
+    document.getElementById('related').innerHTML = EBJanelas.filter(function (j) { return j.status === 'aberta' || j.status === 'pre-abertura'; }).slice(0, 2).map(EBJanelaCard).join('');
+    EBDemoBar();
+    return;
+  }
+
+  /* ==========================================================
+     MODO JANELA DE OFERTAS
+     ========================================================== */
+  var j = EBJanelas.filter(function (x) { return x.id === jId; })[0] || EBJanelas[0];
+  document.title = 'EB Agro — ' + j.id + ' · ' + j.title;
+  document.getElementById('bcCur').textContent = j.id;
+  document.getElementById('cycleWrap').innerHTML = '<div class="row between" style="margin-bottom:.4rem"><span class="eyebrow">Ciclo da Janela</span>' + EBStatus(j.status) + '</div>' + EBCycleHTML(j.status);
+  document.getElementById('vb').innerHTML = EBVBadges(j.ck);
+  ficha(j, [['Data da Janela', j.data + ' · 08h às 18h'], ['Consultor responsável', j.resp], ['Preço de referência', 'R$ ' + j.precoRef + ' /kg'], ['Taxa de serviço', '5% (2,5% + 2,5%)'], ['Pagamento', 'À vista']]);
+
+  // Histórico (anonimizado)
+  var hist = [];
+  if (j.ofertas) {
+    var base = EBnum(j.precoRef), ids = ['#A12', '#B07', '#C31', '#D19', '#E44', '#F02'];
+    for (var k = 0; k < j.ofertas; k++) {
+      var v = (base + 0.05 * (k + 1) + (k % 2 ? 0.03 : 0)).toFixed(2).replace('.', ',');
+      hist.push({ who: 'Comprador ' + ids[k], v: v, h: (9 + k) + ':' + (k % 2 ? '15' : '42'), st: k === j.ofertas - 1 ? (j.fechado ? 'aceita' : 'em-conducao') : 'enviada' });
+    }
+  }
+  document.getElementById('offers').innerHTML = hist.length ? hist.reverse().map(function (h) { return '<li><span class="who">' + h.who + ' · ' + h.h + '</span><span class="row"><span class="val">R$ ' + h.v + ' /kg</span>' + EBStatus(h.st) + '</span></li>'; }).join('') : '<li class="muted">Nenhuma oferta registrada ainda.</li>';
+
+  // Painel
+  var isOpen = j.status === 'aberta';
+  var head =
+    '<span class="lot-code">' + j.id + ' · Lote ' + j.lote + '</span><h1>' + j.title + '</h1>' +
+    '<span class="lot-loc" style="font-size:.95rem">' + I.pin + ' ' + j.loc + ' · ' + j.regiao + '</span>' +
+    '<div class="price-block" style="flex-direction:column;align-items:flex-start;gap:.2rem">' +
+      '<span class="small muted">' + (j.melhor ? 'Melhor oferta registrada' : 'Preço de referência (Radar)') + '</span>' +
+      '<span><span class="big" style="color:' + (j.melhor ? 'var(--green)' : 'var(--navy)') + '">R$ ' + (j.melhor || j.precoRef) + '</span> <span class="u">/kg</span></span>' +
+      (j.melhor ? '<span class="small muted">Referência: R$ ' + j.precoRef + ' /kg · ' + j.ofertas + ' ofertas · ' + j.ativados + ' compradores ativados</span>' : '<span class="small muted">' + j.mapeados + ' compradores compatíveis mapeados</span>') +
+    '</div>' +
+    '<div class="detail-specs">' +
+      '<div class="spec"><span class="ic">' + I.animals + '</span><span><span class="k">Quantidade</span><span class="v">' + j.qty + ' cab.</span></span></div>' +
+      '<div class="spec"><span class="ic">' + I.kg + '</span><span><span class="k">Peso médio</span><span class="v">' + j.peso + ' kg</span></span></div>' +
+      '<div class="spec"><span class="ic">' + I.clock + '</span><span><span class="k">Janela</span><span class="v">' + j.data + '</span></span></div>' +
+      '<div class="spec"><span class="ic">' + I.user + '</span><span><span class="k">Consultor</span><span class="v">' + j.resp + '</span></span></div>' +
+    '</div>';
+
+  var body = '';
+  if (j.status === 'pos-janela' || j.status === 'fechada') {
+    body = j.fechado
+      ? '<div class="notice notice--green"><span>' + I.check + '</span><div><b>Negócio fechado em R$ ' + j.valorFechado + ' /kg.</b> Aceite assistido registrado; dados enviados ao setor de Acertos EB e ao SLI.</div></div>'
+      : '<div class="notice notice--warn"><span>' + I.alert + '</span><div><b>Janela encerrada sem fechamento.</b> Motivo registrado no CRM: ' + j.motivoPerda + '.</div></div>';
+    body += '<div class="detail-actions"><a class="btn btn--ghost btn--block" href="janelas.html">Ver outras Janelas</a></div>';
+  } else if (!isOpen) {
+    body = '<div class="notice notice--gold"><span>' + I.clock + '</span><div><b>' + (j.status === 'fechamento' ? 'Ofertas encerradas às 18h.' : 'Abre em ' + j.data + ' às 08h.') + '</b> ' + (j.status === 'fechamento' ? 'O consultor está conduzindo o aceite com o vendedor.' : 'Registre seu interesse para ser ativado pela Pré-venda antes da abertura.') + '</div></div>' +
+      '<div class="detail-actions">' + (j.status === 'fechamento' ? '' : (level === 'visitante' ? '<a class="btn btn--primary btn--lg btn--block" href="cadastrar.html?next=janela.html?janela=' + j.id + '">Criar cadastro para ser ativado</a>' : '<button class="btn btn--primary btn--lg btn--block btn--interest" id="btnAtv">' + I.heart + ' Quero ser ativado nesta Janela</button>')) +
+      '<a class="btn btn--navy btn--block" href="https://wa.me/5565999968158">' + I.whatsapp + ' Falar com ' + j.resp + '</a></div>';
+  } else {
+    var peso = EBnum(j.peso), qty = j.qty, sug = (EBnum(j.melhor || j.precoRef) + 0.10).toFixed(2).replace('.', ',');
+    body =
+      '<div class="offer gate" id="offerBox">' +
+        (level !== 'validado' ? gateCover(
+            level === 'visitante' ? 'Cadastre-se para ofertar' : level === 'inicial' ? 'Complete seu cadastro para ofertar' : 'Cadastro em validação',
+            level === 'visitante' ? 'O cadastro inicial libera a navegação; o completo, após validação EB Agro, habilita ofertas.' : level === 'inicial' ? 'Documentos e dados da propriedade. A validação EB Agro leva até 1 dia útil.' : 'Nosso time está validando seus dados. Você será avisado por WhatsApp.',
+            level === 'visitante' ? 'cadastrar.html?next=janela.html?janela=' + j.id : level === 'inicial' ? 'cadastrar.html?step=2' : 'conta.html') : '') +
+        '<div class="ref"><span class="small muted">Sua oferta (R$ por kg)</span><span class="small muted">Ref.: R$ ' + j.precoRef + '</span></div>' +
+        '<div class="money-wrap"><input class="input input--money" id="ofr" value="' + sug + '" inputmode="decimal"><span class="suffix">R$/kg</span></div>' +
+        '<div class="calc" id="calc"></div>' +
+        '<button class="btn btn--primary btn--lg btn--block" id="btnOferta">' + I.handshake + ' Enviar oferta para condução assistida</button>' +
+        '<p class="hint" style="text-align:center;margin-top:.6rem">Sem fechamento automático · o consultor conduz até o aceite</p>' +
+      '</div>' +
+      '<div class="detail-actions" style="margin-top:.8rem"><a class="btn btn--navy btn--block" href="https://wa.me/5565999968158">' + I.whatsapp + ' Falar com ' + j.resp + ' agora</a></div>';
+  }
+  panel.innerHTML = head + body + '<div class="assurance">' + I.shield + ' Oferta, aceite e exceções 100% registrados no CRM</div>';
+
+  var ba = document.getElementById('btnAtv');
+  if (ba) ba.addEventListener('click', function () { this.classList.toggle('is-on'); this.innerHTML = this.classList.contains('is-on') ? I.check + ' Você será ativado antes da abertura' : I.heart + ' Quero ser ativado nesta Janela'; });
+
+  // Cálculo da oferta
+  var inp = document.getElementById('ofr');
+  function calc() {
+    if (!inp) return;
+    var p = EBnum(inp.value || '0'); if (isNaN(p)) p = 0;
+    var valor = p * EBnum(j.peso) * j.qty, taxa = valor * 0.025;
+    document.getElementById('calc').innerHTML =
+      '<div><span>' + j.qty + ' cab. × ' + j.peso + ' kg × R$ ' + p.toFixed(2).replace('.', ',') + '</span><span>' + EBbrl(valor) + '</span></div>' +
+      '<div><span>Taxa de serviço comprador (2,5%)</span><span>' + EBbrl(taxa) + '</span></div>' +
+      '<div class="tot"><span>Total estimado (à vista)</span><span>' + EBbrl(valor + taxa) + '</span></div>';
+    return { p: p, valor: valor, taxa: taxa };
+  }
+  if (inp) { inp.addEventListener('input', calc); calc(); }
+
+  // Modal
+  var modal = document.getElementById('modal');
+  var bo = document.getElementById('btnOferta');
+  if (bo) bo.addEventListener('click', function () {
+    var c = calc(); if (!c || c.p <= 0) return;
+    document.getElementById('modalResumo').innerHTML = '<div class="ref" style="margin:0"><span><b class="navy">' + j.id + '</b> · ' + j.title + '</span><span class="v">R$ ' + c.p.toFixed(2).replace('.', ',') + ' /kg</span></div><div class="small muted" style="margin-top:.4rem">Total estimado com taxa: <b class="navy">' + EBbrl(c.valor + c.taxa) + '</b></div>';
+    modal.classList.add('open');
+  });
+  document.getElementById('btnCancel').addEventListener('click', function () { modal.classList.remove('open'); });
+  document.getElementById('btnConfirm').addEventListener('click', function () {
+    if (!document.getElementById('okTermos').checked) { document.getElementById('okTermos').parentElement.style.color = '#9B2C2C'; return; }
+    modal.classList.remove('open');
+    var c = calc();
+    document.getElementById('offerBox').innerHTML =
+      '<div style="text-align:center;padding:.6rem 0"><div style="width:64px;height:64px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;margin:0 auto 1rem">' + I.check + '</div>' +
+      '<h3 style="font-size:1.35rem">Oferta registrada</h3><p class="muted small" style="margin:.4rem 0 1rem">R$ ' + c.p.toFixed(2).replace('.', ',') + ' /kg · em condução por ' + j.resp + '. Você receberá o retorno por WhatsApp ainda hoje.</p>' +
+      EBStatus('em-conducao') + '<div style="margin-top:1.2rem"><a class="btn btn--ghost btn--block" href="conta.html">Acompanhar na Área do Cliente</a></div></div>';
+    document.getElementById('offers').insertAdjacentHTML('afterbegin', '<li><span class="who">Você · agora</span><span class="row"><span class="val">R$ ' + c.p.toFixed(2).replace('.', ',') + ' /kg</span>' + EBStatus('em-conducao') + '</span></li>');
+  });
+
+  // Relacionadas
+  document.getElementById('related').innerHTML = EBJanelas.filter(function (x) { return x.id !== j.id && x.status !== 'fechada'; }).slice(0, 2).map(EBJanelaCard).join('');
+  EBDemoBar();
+});
+</script>
+</body>
+</html>

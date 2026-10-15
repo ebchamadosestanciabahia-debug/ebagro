@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM EB Agro — Janelas & Checklist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="crm">
+  <main class="crm-main">
+    <div class="grid-23" style="align-items:start">
+      <!-- LISTA -->
+      <div class="card" style="padding:.6rem">
+        <div class="tbl-wrap" style="border:none"><table class="tbl" style="min-width:0" id="tb"></table></div>
+      </div>
+
+      <!-- PAINEL DA JANELA -->
+      <div id="painel"></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  EBMountCrm('janelas', 'Janelas & Checklist bloqueante', 'Nenhuma Janela abre com item pendente — sem exceção manual (critério de aceite do TAP)');
+
+  var sel = new URLSearchParams(location.search).get('j') || 'JAN-0925';
+  var order = { 'aberta': 0, 'fechamento': 1, 'pre-abertura': 2, 'pre-demanda': 3, 'pos-janela': 4, 'fechada': 5 };
+
+  function renderList() {
+    document.getElementById('tb').innerHTML = '<thead><tr><th>Janela</th><th>Status</th><th class="r">Checklist</th><th class="r">Mapeados</th></tr></thead><tbody>' +
+      EBJanelas.slice().sort(function (a, b) { return order[a.status] - order[b.status]; }).map(function (j) {
+        var d = j.ck.filter(Boolean).length;
+        return '<tr data-j="' + j.id + '" style="cursor:pointer;' + (j.id === sel ? 'background:var(--green-soft)' : '') + '"><td class="b">' + j.id + '<span class="sub">' + j.title + ' · ' + j.data + '</span></td><td>' + EBStatus(j.status) + '</td><td class="r"><b class="' + (d === 7 ? 'green' : 'navy') + '">' + d + '/7</b></td><td class="r">' + j.mapeados + '<span class="sub">' + j.ativados + ' ativados</span></td></tr>';
+      }).join('') + '</tbody>';
+  }
+  document.getElementById('tb').addEventListener('click', function (e) { var tr = e.target.closest('tr[data-j]'); if (!tr) return; sel = tr.dataset.j; renderList(); renderPanel(); });
+
+  function renderPanel() {
+    var j = EBJanelas.filter(function (x) { return x.id === sel; })[0];
+    var done = j.ck.filter(Boolean).length, ready = done === 7;
+    var isPre = j.status === 'pre-demanda' || j.status === 'pre-abertura';
+    var html =
+      '<div class="card"><div class="row between" style="margin-bottom:.6rem"><div><span class="lot-code">' + j.id + ' · Lote ' + j.lote + '</span><h2 style="font-size:1.5rem;margin-top:.2rem">' + j.title + '</h2><div class="small muted">' + j.loc + ' · ' + j.regiao + ' · ' + j.qty + ' cab. · ' + j.peso + ' kg · ref. R$ ' + j.precoRef + '/kg · ' + j.resp + '</div></div>' + EBStatus(j.status) + '</div>' + EBCycleHTML(j.status) + '</div>';
+
+    // Checklist
+    html += '<div class="card mt"><h3>Checklist bloqueante de abertura <span class="' + (ready ? 'status status--ok' : 'status status--warn') + '">' + done + '/7' + (ready ? ' · liberado' : ' · bloqueado') + '</span></h3>' +
+      '<div class="progress" style="margin-bottom:1rem"><span style="width:' + (done / 7 * 100) + '%"></span></div>' +
+      EBChecklistHTML(j.ck, isPre) +
+      '<div class="row between mt"><div class="small muted">' + (isPre ? 'Clique num item para marcar como cumprido (registro no CRM com responsável e horário).' : 'Checklist congelado após a abertura.') + '</div>' +
+      (isPre ? '<button class="btn btn--primary btn--lg ' + (ready ? '' : 'is-locked') + '" id="btnAbrir" ' + (ready ? '' : 'disabled') + '>' + I.clock + ' Abrir Janela ' + j.data + ' às 08h</button>' : '') + '</div>' +
+      (!ready && isPre ? '<div class="notice notice--warn small mt"><span>' + I.lock + '</span><div><b>Abertura bloqueada.</b> Item pendente: ' + EBChecklistItems.filter(function (_, i) { return !j.ck[i]; }).map(function (it) { return it.t; }).join(', ') + '. Não existe exceção manual — é regra dura do projeto.</div></div>' : '') +
+      '</div>';
+
+    // Operação da Janela aberta / fechamento
+    if (j.status === 'aberta' || j.status === 'fechamento') {
+      html += '<div class="card mt"><h3>Condução da Janela <span class="status status--aberta">' + j.ofertas + ' ofertas · ' + j.ativados + ' ativados</span></h3>' +
+        '<ul class="offers">' + [0,1,2].slice(0, Math.min(3, j.ofertas)).map(function (k) { var v = (EBnum(j.precoRef) + 0.05 * (j.ofertas - k)).toFixed(2).replace('.', ','); return '<li><span class="who">' + ['Agrop. Vale Verde', 'Faz. Três Lagoas', 'Faz. Cachoeira'][k] + ' · ' + (10 + k) + ':' + (k ? '15' : '42') + '</span><span class="row"><span class="val">R$ ' + v + '/kg</span>' + EBStatus(k === 0 ? 'em-conducao' : 'enviada') + '</span></li>'; }).join('') + '</ul>' +
+        '<div class="grid-2 mt"><div class="field"><label>Registrar aceite assistido</label><div class="row"><select class="select" style="flex:1"><option>Melhor oferta · R$ ' + j.melhor + '/kg</option><option>Outra oferta…</option></select><button class="btn btn--primary" id="btnAceite">' + I.handshake + ' Aceite</button></div><span class="hint">Aceite do vendedor confirmado pelo consultor. Dispara Acertos EB + SLI.</span></div>' +
+        '<div class="field"><label>Registrar motivo de perda (se não fechar)</label><div class="row"><select class="select" style="flex:1" id="selPerda"><option value="">Selecione…</option>' + EBMotivosPerda.map(function (m) { return '<option>' + m.m + '</option>'; }).join('') + '</select><button class="btn btn--ghost" id="btnPerda">Registrar</button></div><span class="hint">Obrigatório para encerrar sem fechamento.</span></div></div></div>';
+    }
+    if (j.status === 'pos-janela' || j.status === 'fechada') {
+      html += '<div class="card mt"><h3>Pós-Janela</h3>' + (j.fechado
+        ? '<div class="notice notice--green"><span>' + I.check + '</span><div><b>Fechado em R$ ' + j.valorFechado + '/kg.</b> Enviado a Acertos EB (17/09 16:41) · separado como EB Agro no SLI · comissão interna: 0,2% captação + 0,1% venda ao comercial responsável (encarteiramento único).</div></div>'
+        : '<div class="notice notice--warn"><span>' + I.alert + '</span><div><b>Encerrada sem fechamento.</b> Motivo registrado: ' + j.motivoPerda + '.</div></div>') + '</div>';
+    }
+
+    // Rastreabilidade
+    html += '<div class="card mt"><h3>Rastreabilidade · eventos registrados</h3><ul class="offers small">' +
+      ['Pré-demanda iniciada · Pré-venda mapeou ' + j.mapeados + ' compradores', 'Preço calibrado · Radar ' + EBRadar.atualizado + ' · ref. R$ ' + j.precoRef, 'Checklist ' + done + '/7 · último item por ' + j.resp, (j.status === 'aberta' ? 'Janela aberta às 08:00 · ' + j.ativados + ' compradores ativados por WhatsApp' : 'Abertura prevista ' + j.data + ' 08:00')].map(function (ev, i) { return '<li><span class="who">' + ['18/09 09:12', '18/09 14:30', '19/09 08:05', j.data + ' 08:00'][i] + '</span><span>' + ev + '</span></li>'; }).join('') + '</ul></div>';
+
+    document.getElementById('painel').innerHTML = html;
+
+    // Interações
+    document.querySelectorAll('#painel .ck').forEach(function (el) {
+      if (!isPre) return;
+      el.addEventListener('click', function () { var i = +el.dataset.i; j.ck[i] = j.ck[i] ? 0 : 1; renderList(); renderPanel(); });
+    });
+    var ba = document.getElementById('btnAbrir');
+    if (ba) ba.addEventListener('click', function () { if (j.ck.filter(Boolean).length < 7) return; j.status = 'aberta'; j.ativados = Math.min(j.mapeados, 9); renderList(); renderPanel(); });
+    var bac = document.getElementById('btnAceite');
+    if (bac) bac.addEventListener('click', function () { j.status = 'pos-janela'; j.fechado = true; j.valorFechado = j.melhor; renderList(); renderPanel(); });
+    var bp = document.getElementById('btnPerda');
+    if (bp) bp.addEventListener('click', function () { var v = document.getElementById('selPerda').value; if (!v) return; j.status = 'fechada'; j.fechado = false; j.motivoPerda = v; renderList(); renderPanel(); });
+  }
+
+  renderList(); renderPanel();
+});
+</script>
+</body>
+</html>

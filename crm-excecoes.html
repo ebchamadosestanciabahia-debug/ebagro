@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM EB Agro — Perdas & Exceções</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="crm">
+  <main class="crm-main">
+    <div class="grid-32">
+      <!-- MOTIVOS DE PERDA -->
+      <div class="card">
+        <h3>Motivos de perda · últimos 30 dias <span class="status status--neutral">20 registros</span></h3>
+        <div class="bars" id="mp"></div>
+        <div class="notice notice--info small mt"><span id="n1"></span><div><b>Registro obrigatório.</b> Nenhuma Janela encerra sem fechamento sem um motivo registrado — é o que alimenta o Radar, os dashboards e a análise de perda.</div></div>
+      </div>
+
+      <!-- ALÇADAS -->
+      <div class="card">
+        <h3>Política comercial e alçadas</h3>
+        <div class="checklist">
+          <div class="ck ok" style="cursor:default"><span class="box" id="k1"></span><span class="t">Taxa de serviço padrão: <b>5%</b><small>2,5% vendedor + 2,5% comprador · definitiva</small></span><span class="who">Padrão</span></div>
+          <div class="ck" style="cursor:default;border-style:solid"><span class="box" style="background:var(--gold);border-color:var(--gold)">4</span><span class="t" style="color:var(--navy)">Exceção a <b>4%</b><small>caso excepcional, justificativa + volume relevante</small></span><span class="who">Gerência</span></div>
+          <div class="ck" style="cursor:default;border-style:solid"><span class="box" style="background:var(--navy);border-color:var(--navy)">&lt;4</span><span class="t" style="color:var(--navy)">Abaixo de <b>4%</b><small>não recorrente · decisão colegiada</small></span><span class="who">Diretoria</span></div>
+        </div>
+        <div class="notice notice--warn small mt"><span id="n2"></span><div><b>Comitê de Exceções Comerciais: proposta, não ratificada.</b> Composição, quórum e SLA de resposta (dentro das 08h–18h) aguardam ratificação da Diretoria — pendência da Seção 8 do TAP.</div></div>
+      </div>
+    </div>
+
+    <!-- EXCEÇÕES -->
+    <div class="card mt">
+      <h3>Exceções comerciais registradas <button class="btn btn--primary" id="btnNova" style="padding:.5rem 1rem;font-size:.85rem">+ Registrar exceção</button></h3>
+      <div class="tbl-wrap" style="border:none"><table class="tbl" id="tb"></table></div>
+    </div>
+
+    <!-- FORM -->
+    <div class="card mt" id="form" style="display:none">
+      <h3>Registrar exceção comercial <span class="small muted" style="font-weight:400">rastreabilidade obrigatória (Seção 8.4 do TAP)</span></h3>
+      <form id="f" class="grid-3" style="gap:1rem">
+        <div class="field"><label>Janela</label><select class="select" id="fJ"></select></div>
+        <div class="field"><label>Tipo</label><select class="select" id="fT"><option value="4">Taxa 4%</option><option value="3.5">Taxa abaixo de 4%</option><option value="prazo">Prazo de pagamento</option><option value="outro">Outra condição</option></select></div>
+        <div class="field"><label>Alçada (automática)</label><input class="input" id="fA" readonly value="Gerência"></div>
+        <div class="field" style="grid-column:1/-1"><label>Motivo / justificativa <span class="req">*</span></label><input class="input" required placeholder="Ex.: volume relevante (80 cab.) + cliente estratégico" id="fM"></div>
+        <div class="field"><label>Responsáveis</label><input class="input" placeholder="Nome(s)" id="fR"></div>
+        <div class="field"><label>Condição autorizada</label><input class="input" placeholder="Ex.: 4% sobre o negócio" id="fC"></div>
+        <div class="field"><label>Impacto esperado</label><input class="input" placeholder="Ex.: −R$ 3,4 mil" id="fI"></div>
+        <div style="grid-column:1/-1" class="row"><button class="btn btn--primary" type="submit">Registrar no CRM</button><button class="btn btn--ghost" type="button" id="btnCancel">Cancelar</button></div>
+      </form>
+    </div>
+  </main>
+</div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  EBMountCrm('excecoes', 'Perdas & Exceções', 'Motivos de perda · exceções comerciais com motivo, responsáveis, condição, data e impacto');
+  document.getElementById('n1').innerHTML = I.info; document.getElementById('n2').innerHTML = I.alert; document.getElementById('k1').innerHTML = I.check;
+
+  var max = Math.max.apply(null, EBMotivosPerda.map(function (m) { return m.n; }));
+  document.getElementById('mp').innerHTML = EBMotivosPerda.map(function (m) { return '<div class="bar-row"><span class="lab">' + m.m + '</span><div class="track"><div class="fill red" style="width:' + (m.n / max * 100) + '%"></div></div><span class="num">' + m.n + '</span></div>'; }).join('');
+
+  function render() {
+    document.getElementById('tb').innerHTML = '<thead><tr><th>Data</th><th>Janela</th><th>Tipo</th><th>Motivo</th><th>Alçada</th><th>Responsáveis</th><th class="r">Impacto</th><th>Status</th></tr></thead><tbody>' +
+      EBExcecoes.map(function (e) { return '<tr><td class="small">' + e.data + '</td><td class="b">' + e.janela + '</td><td>' + e.tipo + '</td><td class="small">' + e.motivo + '</td><td class="small">' + e.alcada + '</td><td class="small">' + e.resp + '</td><td class="r small">' + e.impacto + '</td><td>' + EBStatus(e.status) + '</td></tr>'; }).join('') + '</tbody>';
+  }
+  render();
+
+  document.getElementById('fJ').innerHTML = EBJanelas.map(function (j) { return '<option>' + j.id + '</option>'; }).join('');
+  document.getElementById('fT').addEventListener('change', function () { document.getElementById('fA').value = this.value === '4' ? 'Gerência' : this.value === '3.5' ? 'Diretoria (colegiado) · não recorrente' : 'Financeiro / Fiscal / Jurídico / Tecnologia'; });
+  document.getElementById('btnNova').addEventListener('click', function () { document.getElementById('form').style.display = 'block'; document.getElementById('form').scrollIntoView({ behavior: 'smooth' }); });
+  document.getElementById('btnCancel').addEventListener('click', function () { document.getElementById('form').style.display = 'none'; });
+  document.getElementById('f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var t = document.getElementById('fT');
+    EBExcecoes.unshift({ data: '19/09/2026', janela: document.getElementById('fJ').value, tipo: t.options[t.selectedIndex].text, motivo: document.getElementById('fM').value, alcada: document.getElementById('fA').value, resp: document.getElementById('fR').value || '—', impacto: document.getElementById('fI').value || '—', status: 'pendente' });
+    render(); document.getElementById('form').style.display = 'none'; this.reset();
+  });
+});
+</script>
+</body>
+</html>

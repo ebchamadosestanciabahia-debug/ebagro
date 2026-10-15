@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Parceiros Indicadores</title>
+<meta name="description" content="Programa de Parceiros Indicadores EB Agro: indique pecuaristas e receba comissão apenas sobre negócios efetivamente concluídos, validados e recebidos.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <section class="hero" style="padding-bottom:2rem">
+    <div class="hero-bg"><div id="c"></div></div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <span class="eyebrow reveal">Programa de Parceiros Indicadores</span>
+        <h1 class="display reveal" data-delay="1" style="font-size:clamp(2.4rem,5vw,4rem);margin:1.2rem 0 1.4rem">Indique quem confia em você. <em>Ganhe</em> quando o negócio fechar.</h1>
+        <p class="lede reveal" data-delay="2">Modelo único e transparente: comissão <b>apenas</b> sobre negócios efetivamente concluídos, validados e recebidos — com a indicação registrada no CRM desde o primeiro contato.</p>
+        <div class="hero-cta reveal" data-delay="3"><a class="btn btn--primary btn--lg" href="#form">Registrar uma indicação</a><a class="btn btn--ghost btn--lg" href="como-funciona.html">Como a EB Agro funciona</a></div>
+      </div>
+      <div class="hero-visual reveal" data-delay="2">
+        <div class="hero-card">
+          <div class="scene" id="sc"></div>
+          <div class="hero-badge hero-badge--br"><span class="ic" id="b1"></span><span><b>Registro no CRM</b><small>indicação rastreada ponta a ponta</small></span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight">
+    <div class="wrap">
+      <div class="steps connected">
+        <div class="step reveal"><span class="dot">1</span><h3>Você indica</h3><p>Nome, WhatsApp e município do pecuarista — comprador ou vendedor. A indicação ganha um código e entra no CRM.</p></div>
+        <div class="step reveal" data-delay="1"><span class="dot">2</span><h3>A EB Agro conduz</h3><p>Nosso consultor faz o contato no mesmo dia útil, qualifica e conduz o negócio com a palavra firme de sempre.</p></div>
+        <div class="step reveal" data-delay="2"><span class="dot">3</span><h3>Você recebe</h3><p>Comissão liberada só após fechamento, validação e recebimento do negócio — nada de promessa sobre lead.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="form">
+    <div class="wrap grid-23" style="align-items:start">
+      <div>
+        <span class="eyebrow">Regras claras</span>
+        <h2 class="title" style="margin:1rem 0 1rem;font-size:2.2rem">Um modelo só. Sem letra miúda.</h2>
+        <div class="checklist">
+          <div class="ck ok" style="cursor:default"><span class="box" id="k1"></span><span class="t">Comissão apenas sobre negócio concluído<small>fechado, validado e recebido</small></span></div>
+          <div class="ck ok" style="cursor:default"><span class="box" id="k2"></span><span class="t">Indicação registrada no CRM<small>obrigatória — é o que garante a rastreabilidade</small></span></div>
+          <div class="ck ok" style="cursor:default"><span class="box" id="k3"></span><span class="t">Encarteiramento único<small>clientes EB Leilões / EB Agro seguem o comercial responsável</small></span></div>
+          <div class="ck ok" style="cursor:default"><span class="box" id="k4"></span><span class="t">Transparência total<small>você acompanha o status de cada indicação</small></span></div>
+        </div>
+        <div class="notice notice--info mt"><span id="nI"></span><div><b>Programa em estruturação.</b> O mapeamento de parceiros começa na operação real controlada (nov/2026–jan/2027). Cadastre-se agora para ser um dos primeiros.</div></div>
+      </div>
+      <div class="hero-card" style="padding:clamp(1.6rem,3vw,2.4rem)">
+        <form id="f" style="display:flex;flex-direction:column;gap:1.1rem">
+          <div><h3 style="font-size:1.4rem">Registrar indicação</h3><p class="muted small">Seus dados + os dados de quem você indica.</p></div>
+          <span class="eyebrow" style="font-size:.68rem">Sobre você</span>
+          <div class="field-row"><div class="field"><label>Seu nome <span class="req">*</span></label><input class="input" required placeholder="Nome"></div><div class="field"><label>Seu WhatsApp <span class="req">*</span></label><input class="input" type="tel" required placeholder="(65) 9…"></div></div>
+          <div class="field"><label>Você é</label><select class="select"><option>Produtor rural</option><option>Consultor / técnico</option><option>Corretor</option><option>Cooperativa / revenda</option><option>Outro</option></select></div>
+          <span class="eyebrow" style="font-size:.68rem;margin-top:.4rem">Sobre quem você indica</span>
+          <div class="field-row"><div class="field"><label>Nome <span class="req">*</span></label><input class="input" required placeholder="Nome do pecuarista"></div><div class="field"><label>WhatsApp <span class="req">*</span></label><input class="input" type="tel" required placeholder="(65) 9…"></div></div>
+          <div class="field-row"><div class="field"><label>Município/UF <span class="req">*</span></label><input class="input" required placeholder="Ex.: Cáceres/MT"></div><div class="field"><label>Perfil</label><select class="select"><option>Comprador</option><option>Vendedor</option><option>Ambos</option></select></div></div>
+          <div class="field"><label>Contexto</label><textarea class="textarea" style="min-height:80px" placeholder="Ex.: tem 40 machos Nelore para vender em outubro"></textarea></div>
+          <label class="checkbox"><input type="checkbox" required> Tenho autorização do indicado para compartilhar o contato.</label>
+          <button class="btn btn--primary btn--lg btn--block" type="submit">Registrar indicação no CRM</button>
+        </form>
+        <div id="ok" style="display:none;text-align:center;padding:1.5rem 0">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;margin:0 auto 1rem" id="okIc"></div>
+          <h3 style="font-size:1.5rem">Indicação registrada!</h3>
+          <p class="muted" style="margin:.5rem 0 1.2rem">Código <b class="navy">IND-2026-0417</b> · <span class="status status--info">Aguardando contato</span></p>
+          <p class="muted small">Nosso consultor faz o primeiro contato no mesmo dia útil. Você acompanha o status pelo WhatsApp.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  document.getElementById('c').innerHTML = EBContour(); document.getElementById('sc').innerHTML = EBPasture(2);
+  document.getElementById('b1').innerHTML = I.handshake; document.getElementById('nI').innerHTML = I.info; document.getElementById('okIc').innerHTML = I.check;
+  ['k1','k2','k3','k4'].forEach(function (id) { document.getElementById(id).innerHTML = I.check; });
+  document.getElementById('f').addEventListener('submit', function (e) { e.preventDefault(); this.style.display = 'none'; document.getElementById('ok').style.display = 'block'; });
+});
+</script>
+</body>
+</html>

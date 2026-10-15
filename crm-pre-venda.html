@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM EB Agro — Pré-venda</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="crm">
+  <main class="crm-main">
+    <div class="kpis" style="margin-bottom:1.2rem">
+      <div class="kpi"><div class="l">Compradores mapeados</div><div class="v">64</div><div class="d">5 categorias · 3 regiões</div></div>
+      <div class="kpi kpi--gold"><div class="l">Com interesse real</div><div class="v">38</div><div class="d">interesse registrado em lote</div></div>
+      <div class="kpi kpi--navy"><div class="l">Clientes qualificados</div><div class="v">112</div><div class="d up">meta ≥ 100 atingida</div></div>
+      <div class="kpi"><div class="l">Janelas bloqueadas por mínimo</div><div class="v">1</div><div class="d down">JAN-0925 · 8/10</div></div>
+    </div>
+
+    <div class="grid-32">
+      <div class="card">
+        <h3>Compradores mapeados por categoria</h3>
+        <div class="tbl-wrap" style="border:none"><table class="tbl" style="min-width:0" id="tb"></table></div>
+      </div>
+      <div class="card">
+        <h3>Ativação · JAN-0925 <span class="status status--warn">8 / 10 mín.</span></h3>
+        <p class="small muted" style="margin-bottom:.8rem">½ Aberdeen Angus · Genética · Cáceres/MT · abre 25/09 08h. Regra dura: mínimo 10 compradores com interesse real antes da abertura.</p>
+        <div class="progress" style="margin-bottom:1rem"><span style="width:80%;background:var(--gold)"></span></div>
+        <ul class="offers small" id="ativ"></ul>
+        <button class="btn btn--primary btn--block mt" id="btnAtivar">Ativar compradores compatíveis via WhatsApp</button>
+        <p class="hint" style="margin-top:.5rem">Ativação registrada no CRM com horário e responsável.</p>
+      </div>
+    </div>
+
+    <div class="card mt">
+      <h3>Distribuição por região do piloto</h3>
+      <div class="bars" id="reg"></div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  EBMountCrm('pre-venda', 'Pré-venda', 'Compradores mapeados por categoria — pré-condição do checklist bloqueante');
+
+  document.getElementById('tb').innerHTML = '<thead><tr><th>Categoria</th><th class="r">Mapeados</th><th class="r">Interesse real</th><th>Regiões</th><th>Janelas vinculadas</th></tr></thead><tbody>' +
+    EBPreVenda.map(function (p) { return '<tr><td class="b">' + p.cat + '</td><td class="r">' + p.compradores + '</td><td class="r"><b class="' + (p.ativos >= 10 ? 'green' : 'navy') + '">' + p.ativos + '</b>' + (p.ativos < 10 ? '<span class="sub" style="color:#9A5B12">abaixo do mínimo</span>' : '') + '</td><td class="small">' + p.regioes + '</td><td class="small">' + p.janelas + '</td></tr>'; }).join('') + '</tbody>';
+
+  var buyers = [['Agrop. Vale Verde', 'Rondonópolis', 'ativado'], ['Faz. Três Lagoas', 'Jaciara', 'ativado'], ['Faz. Cachoeira', 'Cáceres', 'ativado'], ['Rancho Guaporé', 'P. e Lacerda', 'pendente'], ['Faz. Paraíso', 'Jaciara', 'pendente'], ['Faz. Monte Alto', 'Rondonópolis', 'ativado'], ['Sítio Recanto', 'Poconé', 'ativado'], ['Faz. Boa Vista', 'Rondonópolis', 'ativado']];
+  document.getElementById('ativ').innerHTML = buyers.map(function (b) { return '<li><span class="who"><b class="navy">' + b[0] + '</b> · ' + b[1] + '</span>' + EBStatus(b[2] === 'ativado' ? 'ok' : 'pendente').replace('Completo · validado', 'Ativado').replace('Em validação', 'A ativar') + '</li>'; }).join('');
+  document.getElementById('btnAtivar').addEventListener('click', function () { this.textContent = 'Ativação enviada · 8 compradores'; this.classList.add('is-locked'); });
+
+  var reg = [['Sul', 26], ['Baixada', 23], ['Guaporé', 15]];
+  document.getElementById('reg').innerHTML = reg.map(function (r, i) { return '<div class="bar-row"><span class="lab">' + r[0] + '</span><div class="track"><div class="fill ' + ['', 'gold', 'navy'][i] + '" style="width:' + (r[1] / 26 * 100) + '%"></div></div><span class="num">' + r[1] + '</span></div>'; }).join('');
+});
+</script>
+</body>
+</html>

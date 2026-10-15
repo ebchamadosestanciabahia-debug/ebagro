@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<title>EB Agro — redirecionando…</title>
+<!-- Página antiga de detalhe de lote. No modelo 2.0 o detalhe é a Janela de Ofertas (ou a Oportunidade). -->
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+(function () {
+  var code = new URLSearchParams(location.search).get('lote');
+  var j = (window.EBJanelas || []).filter(function (x) { return x.lote === code; })[0];
+  location.replace(j ? 'janela.html?janela=' + j.id : 'janelas.html');
+})();
+</script>
+</head>
+<body style="font-family:system-ui;padding:2rem;color:#002846">
+Redirecionando para as <a href="janelas.html">Janelas de Ofertas</a>…
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM EB Agro — Lotes & Oportunidades</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="crm">
+  <main class="crm-main">
+    <div class="kpis" style="margin-bottom:1.2rem">
+      <div class="kpi kpi--gold"><div class="l">Em análise (validação)</div><div class="v" id="kA">0</div><div class="d">régua: até 1 dia útil</div></div>
+      <div class="kpi"><div class="l">No Catálogo (10 dias)</div><div class="v" id="kC">0</div><div class="d">medindo interesse</div></div>
+      <div class="kpi kpi--navy"><div class="l">Em Janela</div><div class="v" id="kJ">0</div><div class="d">pré-demanda → fechamento</div></div>
+      <div class="kpi"><div class="l">Fechados no mês</div><div class="v">1</div><div class="d up">JAN-0917 · 40 cab.</div></div>
+    </div>
+
+    <div class="card">
+      <h3>Pipeline de lotes <span class="small muted" style="font-weight:400">Oportunidade → validação → Catálogo (≤10 dias) → Janela</span></h3>
+      <div class="chips" id="chips">
+        <button class="chip active" data-f="all">Todos</button>
+        <button class="chip" data-f="em-analise">Em análise</button>
+        <button class="chip" data-f="ativa">No Catálogo</button>
+        <button class="chip" data-f="janela">Em Janela</button>
+        <button class="chip" data-f="expirada">Expirados</button>
+      </div>
+      <div class="tbl-wrap" style="border:none"><table class="tbl" id="tb"></table></div>
+    </div>
+
+    <div class="notice notice--gold small mt"><span id="nG"></span><div><b>Teste do catálogo passivo.</b> Um lote só migra para Janela com interesse real mapeado (mín. 10 compradores) e checklist em andamento. Sem isso, expira em 10 dias — não vira vitrine.</div></div>
+  </main>
+</div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  EBMountCrm('lotes', 'Lotes & Oportunidades', 'Pré-cadastro, validação, prazo de 10 dias e migração para Janela');
+  document.getElementById('nG').innerHTML = I.alert;
+  var f = 'all';
+  function rows() {
+    var ops = EBOportunidades.map(function (o) { return { tipo: 'op', o: o }; });
+    var jan = EBJanelas.map(function (j) { return { tipo: 'jan', j: j }; });
+    return ops.concat(jan);
+  }
+  function render() {
+    var list = rows().filter(function (r) {
+      if (f === 'all') return true;
+      if (f === 'janela') return r.tipo === 'jan';
+      return r.tipo === 'op' && r.o.status === f;
+    });
+    document.getElementById('tb').innerHTML = '<thead><tr><th>Código</th><th>Lote</th><th>Etapa</th><th class="r">Interesse / Ofertas</th><th>Validação</th><th>Prazo</th><th></th></tr></thead><tbody>' + list.map(function (r) {
+      if (r.tipo === 'op') { var o = r.o;
+        var act = o.status === 'em-analise' ? '<button class="btn btn--primary" data-val="' + o.id + '" style="padding:.45rem .9rem;font-size:.82rem">Validar e publicar</button>'
+          : o.status === 'ativa' ? (o.interessados >= 10 ? '<button class="btn btn--gold" data-mig="' + o.id + '" style="padding:.45rem .9rem;font-size:.82rem">Migrar p/ Janela</button>' : '<span class="hint">mín. 10 interessados</span>')
+          : o.status === 'migrada' ? '<a class="link-arrow small" href="crm-janelas.html?j=' + o.janela + '">' + o.janela + ' ' + I.arrow + '</a>' : '';
+        return '<tr><td class="b">' + o.id + '</td><td>' + o.title + '<span class="sub">' + o.loc + ' · ' + o.peso + ' kg</span></td><td>' + EBStatus(o.status) + '</td><td class="r"><b class="navy">' + o.interessados + '</b> interessados</td><td>' + EBVBadges([0,0,0]) + '</td><td class="small">' + (o.status === 'ativa' ? '<b class="' + (o.restam <= 2 ? '' : 'navy') + '" style="' + (o.restam <= 2 ? 'color:#C2410C' : '') + '">' + o.restam + ' dia(s)</b> de 10' : o.status === 'em-analise' ? 'publicado ' + o.publicado : '—') + '</td><td class="r">' + act + '</td></tr>';
+      } else { var j = r.j;
+        return '<tr><td class="b">' + j.id + '<span class="sub">Lote ' + j.lote + '</span></td><td>' + j.title + '<span class="sub">' + j.loc + ' · ' + j.peso + ' kg</span></td><td>' + EBStatus(j.status) + '</td><td class="r"><b class="navy">' + j.ofertas + '</b> ofertas<span class="sub">' + j.mapeados + ' mapeados</span></td><td>' + EBVBadges(j.ck) + '</td><td class="small">Janela ' + j.data + '</td><td class="r"><a class="link-arrow small" href="crm-janelas.html?j=' + j.id + '">painel ' + I.arrow + '</a></td></tr>';
+      }
+    }).join('') + '</tbody>';
+    document.getElementById('kA').textContent = EBOportunidades.filter(function (o) { return o.status === 'em-analise'; }).length;
+    document.getElementById('kC').textContent = EBOportunidades.filter(function (o) { return o.status === 'ativa'; }).length;
+    document.getElementById('kJ').textContent = EBJanelas.filter(function (j) { return ['pre-demanda','pre-abertura','aberta','fechamento'].indexOf(j.status) >= 0; }).length;
+  }
+  document.getElementById('chips').addEventListener('click', function (e) { var c = e.target.closest('.chip'); if (!c) return; this.querySelectorAll('.chip').forEach(function (x) { x.classList.remove('active'); }); c.classList.add('active'); f = c.dataset.f; render(); });
+  document.getElementById('tb').addEventListener('click', function (e) {
+    var v = e.target.closest('[data-val]'), m = e.target.closest('[data-mig]');
+    if (v) { var o = EBOportunidades.filter(function (x) { return x.id === v.dataset.val; })[0]; o.status = 'ativa'; o.restam = 10; render(); }
+    if (m) { var o2 = EBOportunidades.filter(function (x) { return x.id === m.dataset.mig; })[0]; var id = 'JAN-' + (1000 + EBJanelas.length); o2.status = 'migrada'; o2.janela = id;
+      EBJanelas.push({ id: id, lote: o2.id.replace('OP-', '0'), title: o2.title, cat: o2.cat, sexo: o2.sexo, qty: o2.qty, peso: o2.peso, raca: o2.raca, loc: o2.loc, regiao: o2.regiao, status: 'pre-demanda', data: 'a definir', precoRef: '—', melhor: null, ofertas: 0, mapeados: o2.interessados, ativados: 0, resp: 'a definir', ck: [0,0,0,0,0,0,0] }); render(); }
+  });
+  render();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — Cadastrar lote</title>
+<meta name="description" content="Pré-cadastre seu lote no Catálogo de Oportunidades. A EB Agro valida, calibra o preço com o Radar e mapeia compradores antes da Janela.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <section class="section">
+    <div class="wrap grid-23" style="align-items:start">
+      <div style="position:sticky;top:98px">
+        <span class="eyebrow">Quero vender</span>
+        <h1 style="font-size:clamp(2rem,4vw,3rem);margin:1rem 0 .8rem">Pré-cadastre seu lote no Catálogo.</h1>
+        <p class="muted" style="margin-bottom:1.6rem">Nada de vitrine parada: a EB Agro valida o lote, calibra o preço com o Radar e mapeia compradores <b>antes</b> de abrir a Janela.</p>
+        <div class="checklist">
+          <div class="ck ok" style="cursor:default"><span class="box" id="k1"></span><span class="t">1 · Pré-cadastro<small>você preenche os dados abaixo</small></span><span class="who">Você</span></div>
+          <div class="ck" style="cursor:default"><span class="box">2</span><span class="t">Análise e validação<small>equipe EB Agro · até 1 dia útil</small></span><span class="who">EB Agro</span></div>
+          <div class="ck" style="cursor:default"><span class="box">3</span><span class="t">Catálogo de Oportunidades<small>até 10 dias medindo interesse</small></span><span class="who">Plataforma</span></div>
+          <div class="ck" style="cursor:default"><span class="box">4</span><span class="t">Checklist bloqueante<small>filmado · pesado · validado · preço · compradores</small></span><span class="who">Campo + Comercial</span></div>
+          <div class="ck" style="cursor:default"><span class="box">5</span><span class="t">Janela de Ofertas<small>08h–18h · fechamento assistido</small></span><span class="who">Consultor</span></div>
+        </div>
+        <div class="notice notice--gold mt"><span id="nG"></span><div><b>Taxa de serviço do vendedor: 2,5%</b> sobre o negócio fechado. Pagamento à vista, conduzido pela EB Agro via Acertos EB.</div></div>
+      </div>
+
+      <div class="hero-card gate" id="box" style="padding:clamp(1.6rem,3vw,2.4rem)">
+        <form id="f" style="display:flex;flex-direction:column;gap:1.1rem">
+          <div><h2 style="font-size:1.6rem">Dados do lote</h2><p class="muted small">Sem preço de oferta nesta etapa. O preço mínimo é privado e serve só para calibração.</p></div>
+          <div class="field-row">
+            <div class="field"><label>Categoria <span class="req">*</span></label><select class="select" required><option value="">Selecione</option><option>Corte</option><option>Genética</option></select></div>
+            <div class="field"><label>Sexo <span class="req">*</span></label><div class="segment" style="width:100%"><button type="button" class="active" data-value="Macho" style="flex:1">Machos</button><button type="button" data-value="Fêmea" style="flex:1">Fêmeas</button></div><input type="hidden" value="Macho"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Raça <span class="req">*</span></label><select class="select" required><option value="">Selecione</option><option>Nelore</option><option>Nelore P.O</option><option>Brangus</option><option>Senepol</option><option>½ Aberdeen Angus</option><option>½ Senepol</option><option>Brahmanel</option><option>Anelorado</option><option>Cruzamento Industrial</option></select></div>
+            <div class="field"><label>Quantidade (cab.) <span class="req">*</span></label><input class="input" type="number" min="1" required placeholder="Ex.: 30"></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Peso médio estimado (kg) <span class="req">*</span></label><input class="input" type="text" required placeholder="Ex.: 230"></div>
+            <div class="field"><label>Idade média</label><select class="select"><option>12–18 meses</option><option>18–24 meses</option><option>24–36 meses</option><option>Acima de 36 meses</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Município <span class="req">*</span></label><input class="input" type="text" required placeholder="Ex.: Rosário Oeste"></div>
+            <div class="field"><label>Região do piloto <span class="req">*</span></label><select class="select" required><option value="">Selecione</option><option>Sul (MT)</option><option>Baixada (MT)</option><option>Guaporé (MT)</option></select></div>
+          </div>
+          <div class="field-row">
+            <div class="field"><label>Preço mínimo desejado (R$/kg) <span class="hint">privado</span></label><div class="money-wrap"><input class="input" type="text" placeholder="Ex.: 16,20"><span class="suffix">R$/kg</span></div></div>
+            <div class="field"><label>Disponibilidade</label><select class="select"><option>Imediata</option><option>Em até 15 dias</option><option>Em até 30 dias</option></select></div>
+          </div>
+          <div class="field"><label>Fotos / vídeo prévio</label>
+            <div style="border:1.5px dashed var(--line);border-radius:10px;padding:1.2rem;text-align:center;background:#fff"><span class="muted small">Arraste arquivos ou <b style="color:var(--green)">clique para enviar</b>. A filmagem oficial é feita pela equipe EB Agro na validação.</span></div>
+          </div>
+          <div class="field"><label>Observações</label><textarea class="textarea" placeholder="Manejo, sanidade, genética, condições de retirada…" style="min-height:90px"></textarea></div>
+          <label class="checkbox"><input type="checkbox" required> Confirmo que sou responsável pelo lote e aceito o Regulamento Geral (taxa de 2,5%, pagamento à vista, validação EB Agro).</label>
+          <button class="btn btn--primary btn--lg btn--block" type="submit">Enviar pré-cadastro para análise</button>
+        </form>
+        <div id="ok" style="display:none;text-align:center;padding:1.5rem 0">
+          <div style="width:64px;height:64px;border-radius:50%;background:var(--green-soft);color:var(--green);display:grid;place-items:center;margin:0 auto 1rem" id="okIc"></div>
+          <h2 style="font-size:1.6rem">Pré-cadastro enviado!</h2>
+          <p class="muted" style="margin:.5rem 0 1rem">Código <b class="navy">OP-124</b> · <span id="okSt"></span></p>
+          <p class="muted small" style="max-width:44ch;margin:0 auto 1.4rem">Seu consultor entra em contato no mesmo dia útil para validar os dados e agendar a filmagem/pesagem. Depois disso, o lote entra no Catálogo por até 10 dias.</p>
+          <div class="row" style="justify-content:center"><a class="btn btn--primary" href="conta.html">Acompanhar em Meus lotes</a><a class="btn btn--ghost" href="oportunidades.html">Ver o Catálogo</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons, lv = EBSession.level;
+  document.getElementById('k1').innerHTML = I.check; document.getElementById('nG').innerHTML = I.price; document.getElementById('okIc').innerHTML = I.check;
+  document.getElementById('okSt').innerHTML = EBStatus('em-analise');
+  if (lv !== 'validado') {
+    var msg = lv === 'visitante' ? ['Cadastre-se para vender', 'Cadastrar lote exige cadastro completo validado. Comece pelo inicial.', 'cadastrar.html?next=cadastrar-lote.html', 'Criar cadastro inicial']
+      : lv === 'inicial' ? ['Complete seu cadastro para vender', 'Documentos e dados da propriedade; validação EB Agro em até 1 dia útil.', 'cadastrar.html?step=2', 'Completar cadastro']
+      : ['Cadastro em validação', 'Assim que a EB Agro validar seus dados, o cadastro de lotes é liberado.', 'conta.html', 'Ver status'];
+    document.getElementById('box').insertAdjacentHTML('afterbegin', '<div class="gate-cover"><span class="lock">' + I.lock + '</span><b>' + msg[0] + '</b><p>' + msg[1] + '</p><a class="btn btn--primary" href="' + msg[2] + '">' + msg[3] + '</a></div>');
+  }
+  document.getElementById('f').addEventListener('submit', function (e) { e.preventDefault(); this.style.display = 'none'; document.getElementById('ok').style.display = 'block'; });
+  EBDemoBar();
+});
+</script>
+</body>
+</html>

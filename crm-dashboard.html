@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM EB Agro — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div class="crm">
+  <main class="crm-main">
+    <!-- KPIs do TAP (Seção 9) -->
+    <div class="kpis">
+      <div class="kpi"><div class="l">Conversão oferta → fechamento</div><div class="v">33%</div><div class="d up">▲ 8 p.p. vs. semana anterior</div></div>
+      <div class="kpi"><div class="l">Compradores ativados / Janela</div><div class="v">9,8</div><div class="d">meta: ≥ 10 com interesse real</div></div>
+      <div class="kpi kpi--gold"><div class="l">Lotes com oferta registrada</div><div class="v">83%</div><div class="d">5 de 6 Janelas</div></div>
+      <div class="kpi kpi--navy"><div class="l">SLA de contato (mesmo dia útil)</div><div class="v">96%</div><div class="d down">2 leads fora do SLA</div></div>
+      <div class="kpi"><div class="l">Eventos críticos no CRM</div><div class="v">100%</div><div class="d up">0 lacunas desde o MVP</div></div>
+      <div class="kpi kpi--gold"><div class="l">NPS pós-venda</div><div class="v">72</div><div class="d">11 respostas</div></div>
+    </div>
+
+    <div class="grid-32 mt">
+      <!-- Janelas de hoje -->
+      <div class="card">
+        <h3>Janelas — hoje e próximas <a href="crm-janelas.html">painel completo →</a></h3>
+        <div class="tbl-wrap" style="border:none"><table class="tbl" style="min-width:0" id="tbJ"></table></div>
+      </div>
+      <!-- Ponto de equilíbrio -->
+      <div class="card">
+        <h3>Animais negociados no mês <span class="status status--info">setembro</span></h3>
+        <div style="font-family:var(--serif);font-size:2.4rem;color:var(--navy);font-weight:600;line-height:1">1.412 <span style="font-size:1rem;color:var(--muted);font-family:var(--sans);font-weight:500">/ 2.168 cab.</span></div>
+        <p class="small muted" style="margin:.4rem 0 .9rem">Ponto de equilíbrio a 5% de taxa de serviço (análise de política comercial).</p>
+        <div class="progress"><span style="width:65%"></span></div>
+        <div class="row between small muted" style="margin-top:.5rem"><span>65% do ponto de equilíbrio</span><span>faltam 756</span></div>
+        <div class="notice notice--gold small mt"><span id="nG"></span><div><b>Taxa padrão 5% inegociável no piloto.</b> Exceções (4% Gerência · &lt;4% Diretoria) só por alçada formal — nunca por acúmulo.</div></div>
+      </div>
+    </div>
+
+    <div class="grid-3 mt">
+      <!-- Funil resumo -->
+      <div class="card">
+        <h3>Funil de compradores <a href="crm-funil.html">abrir →</a></h3>
+        <div class="bars" id="fc"></div>
+      </div>
+      <div class="card">
+        <h3>Funil de vendedores <a href="crm-funil.html">abrir →</a></h3>
+        <div class="bars" id="fv"></div>
+      </div>
+      <div class="card">
+        <h3>Motivos de perda <a href="crm-excecoes.html">detalhar →</a></h3>
+        <div class="bars" id="mp"></div>
+      </div>
+    </div>
+
+    <div class="grid-32 mt">
+      <!-- Alertas de governança -->
+      <div class="card">
+        <h3>Alertas de governança</h3>
+        <div class="checklist">
+          <div class="ck" style="cursor:default"><span class="box" style="border-color:#C2410C;color:#C2410C" id="a1"></span><span class="t" style="color:var(--navy)">JAN-0925 · checklist 6/7 — compradores mapeados 8/10<small>Janela de amanhã bloqueada até Pré-venda completar o mínimo</small></span><a class="btn btn--ghost" href="crm-pre-venda.html" style="padding:.45rem .9rem;font-size:.82rem">Pré-venda</a></div>
+          <div class="ck" style="cursor:default"><span class="box" style="border-color:#B2903E;color:#B2903E" id="a2"></span><span class="t" style="color:var(--navy)">2 clientes fora do SLA de contato<small>Rancho Guaporé (2 dias) · Estância Rio Branco (5 dias)</small></span><a class="btn btn--ghost" href="crm-clientes.html" style="padding:.45rem .9rem;font-size:.82rem">Clientes</a></div>
+          <div class="ck" style="cursor:default"><span class="box" style="border-color:#B2903E;color:#B2903E" id="a3"></span><span class="t" style="color:var(--navy)">2 cadastros completos aguardando validação<small>Rancho Guaporé · Agro Leverger — régua: até 1 dia útil</small></span><a class="btn btn--ghost" href="crm-clientes.html" style="padding:.45rem .9rem;font-size:.82rem">Validar</a></div>
+          <div class="ck ok" style="cursor:default"><span class="box" id="a4"></span><span class="t">Nenhuma exceção comercial pendente de alçada<small>última: JAN-0919 · 4% aprovada pela Gerência</small></span></div>
+        </div>
+      </div>
+      <!-- Integrações -->
+      <div class="card" id="integracoes">
+        <h3>Integrações</h3>
+        <div id="ints" style="display:flex;flex-direction:column;gap:.7rem"></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  EBMountCrm('dashboard', 'Dashboard', 'Indicadores de sucesso do TAP · Fase 3 (set/2026) · piloto MT');
+  document.getElementById('nG').innerHTML = I.alert;
+  document.getElementById('a1').innerHTML = I.alert; document.getElementById('a2').innerHTML = I.clock; document.getElementById('a3').innerHTML = I.user; document.getElementById('a4').innerHTML = I.check;
+
+  document.getElementById('tbJ').innerHTML = '<tbody>' + EBJanelas.filter(function (j) { return j.status !== 'fechada' && j.status !== 'pos-janela'; }).map(function (j) {
+    var d = j.ck.filter(Boolean).length;
+    return '<tr><td class="b">' + j.id + '<span class="sub">' + j.title + '</span></td><td>' + EBStatus(j.status) + '</td><td class="small">' + j.data + '<span class="sub">' + j.resp + '</span></td><td class="r small">' + (j.status === 'aberta' || j.status === 'fechamento' ? '<b class="navy">' + j.ofertas + '</b> ofertas' : 'checklist <b class="navy">' + d + '/7</b>') + '</td></tr>';
+  }).join('') + '</tbody>';
+
+  function bars(id, data, cls) {
+    var max = Math.max.apply(null, data.map(function (d) { return d[1]; }));
+    document.getElementById(id).innerHTML = data.map(function (d) { return '<div class="bar-row"><span class="lab">' + d[0] + '</span><div class="track"><div class="fill ' + cls + '" style="width:' + (d[1] / max * 100) + '%"></div></div><span class="num">' + d[1] + '</span></div>'; }).join('');
+  }
+  bars('fc', Object.keys(EBFunilCompradores).map(function (k) { return [k, EBFunilCompradores[k].length + (k === 'Lead' ? 21 : k === 'Qualificado' ? 14 : k === 'Interesse em lote' ? 9 : k === 'Ativado p/ Janela' ? 6 : 1)]; }), '');
+  bars('fv', Object.keys(EBFunilVendedores).map(function (k) { return [k, EBFunilVendedores[k].length + (k === 'Lead' ? 12 : k === 'Contato feito' ? 7 : 2)]; }), 'gold');
+  bars('mp', EBMotivosPerda.map(function (m) { return [m.m, m.n]; }), 'red');
+
+  document.getElementById('ints').innerHTML = EBIntegracoes.map(function (it) {
+    return '<div class="row between" style="padding:.8rem 1rem;border:1px solid var(--line);border-radius:10px;background:var(--paper)"><div><b class="navy">' + it.n + '</b><div class="small muted">' + it.d + '</div><div class="hint">' + it.resp + ' · ' + it.ultimo + '</div></div>' + EBStatus(it.status) + '</div>';
+  }).join('');
+});
+</script>
+</body>
+</html>

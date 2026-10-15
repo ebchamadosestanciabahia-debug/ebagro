@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EB Agro — A mesa assistida de negócios bovinos</title>
+<meta name="description" content="Plataforma da Estância Bahia para compra e venda de lotes de bovinos: Janela de Ofertas com condução assistida, Catálogo de Oportunidades e Radar de Mercado.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" type="image/x-icon" href="assets/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="assets/favicon-16.png">
+<link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png">
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<div data-header></div>
+
+<main>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"><div id="heroContour"></div></div>
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <span class="eyebrow reveal">Plataforma da Estância Bahia · EB Agro 2.0</span>
+        <h1 class="display reveal" data-delay="1">Confiança para vender. <em>Agilidade</em> para comprar.</h1>
+        <p class="lede reveal" data-delay="2">A mesa assistida de negócios bovinos: lotes validados, preço calibrado e compradores mapeados <b>antes</b> de cada Janela de Ofertas abrir. Nunca mais uma vitrine parada.</p>
+        <div class="hero-cta reveal" data-delay="3">
+          <a class="btn btn--primary btn--lg" href="janelas.html">Ver Janelas de Ofertas <span id="a1"></span></a>
+          <a class="btn btn--ghost btn--lg" href="cadastrar.html">Criar cadastro inicial</a>
+        </div>
+        <div class="hero-stats reveal" data-delay="4">
+          <div class="stat"><div class="num" id="stAbertas">—</div><div class="label">Janelas abertas ou em fechamento</div></div>
+          <div class="stat"><div class="num" id="stOps">—</div><div class="label">oportunidades medindo interesse</div></div>
+          <div class="stat"><div class="num">08<span>h</span>–18<span>h</span></div><div class="label">horário das Janelas</div></div>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" data-delay="2">
+        <div class="hero-card">
+          <div id="seal" class="seal"></div>
+          <div class="scene" id="heroScene"></div>
+          <div class="hero-badge hero-badge--tl">
+            <span class="ic" id="b1"></span>
+            <span><b>Checklist bloqueante</b><small>nenhuma Janela abre incompleta</small></span>
+          </div>
+          <div class="hero-badge hero-badge--br">
+            <span class="ic" id="b2"></span>
+            <span><b>Fechamento assistido</b><small>oferta · aceite · condução comercial</small></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST STRIP -->
+  <section class="trust">
+    <div class="wrap trust-inner">
+      <div class="trust-item" id="t1"><span></span> Lotes filmados, pesados e validados</div>
+      <div class="trust-item" id="t2"><span></span> Taxa de serviço transparente: 5%</div>
+      <div class="trust-item" id="t3"><span></span> Radar de Mercado com dados próprios</div>
+      <div class="trust-item" id="t4"><span></span> Conta única para comprar e vender</div>
+    </div>
+  </section>
+
+  <!-- JANELAS EM ANDAMENTO -->
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="txt">
+          <span class="eyebrow reveal">Janelas de Ofertas</span>
+          <h2 class="title reveal" data-delay="1">O que está aberto<br>e o que vem a seguir.</h2>
+        </div>
+        <a class="link-arrow reveal" data-delay="2" href="janelas.html">Todas as Janelas <span id="a2"></span></a>
+      </div>
+      <div id="janelasGrid" style="display:flex;flex-direction:column;gap:1rem"></div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA A JANELA -->
+  <section class="section" style="background:var(--paper);border-block:1px solid var(--line)">
+    <div class="wrap">
+      <div class="sec-head sec-head--center">
+        <span class="eyebrow eyebrow--center reveal">Como funciona</span>
+        <h2 class="title reveal" data-delay="1">Um ciclo comercial com método —<br>não um leilão disfarçado.</h2>
+        <p class="reveal" data-delay="2" style="max-width:60ch">Cada Janela só abre depois de o lote ser validado, o preço calibrado e os compradores compatíveis mapeados. A oferta é registrada na plataforma e conduzida pelo nosso time até o aceite.</p>
+      </div>
+      <div id="cycleHome" class="reveal"></div>
+      <div class="pillars" style="margin-top:2.5rem">
+        <div class="pillar reveal" data-delay="1"><span class="idx">01</span><span class="p-ic" id="p1"></span><h3>Pré-demanda</h3><p>Nosso módulo de Pré-venda mapeia compradores por categoria antes de qualquer abertura.</p></div>
+        <div class="pillar reveal" data-delay="2"><span class="idx">02</span><span class="p-ic" id="p2"></span><h3>Checklist bloqueante</h3><p>Filmado, pesado, validado, preço calibrado, compradores mapeados, responsável e horário.</p></div>
+        <div class="pillar reveal" data-delay="3"><span class="idx">03</span><span class="p-ic" id="p3"></span><h3>Janela aberta 08h–18h</h3><p>Compradores habilitados registram ofertas; o consultor conduz a negociação em tempo real.</p></div>
+        <div class="pillar reveal" data-delay="4"><span class="idx">04</span><span class="p-ic" id="p4"></span><h3>Aceite e pós-Janela</h3><p>Fechamento assistido, registro integral no CRM e fluxo financeiro via Acertos EB.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CATÁLOGO DE OPORTUNIDADES -->
+  <section class="section">
+    <div class="wrap">
+      <div class="sec-head">
+        <div class="txt">
+          <span class="eyebrow reveal">Catálogo de Oportunidades</span>
+          <h2 class="title reveal" data-delay="1">Lotes em pré-cadastro,<br>medindo interesse por 10 dias.</h2>
+          <p class="reveal" data-delay="2">Sem oferta formal. Se houver interesse suficiente, o lote migra para uma Janela.</p>
+        </div>
+        <a class="link-arrow reveal" data-delay="2" href="oportunidades.html">Ver catálogo <span id="a3"></span></a>
+      </div>
+      <div class="lot-grid" id="opsGrid"></div>
+    </div>
+  </section>
+
+  <!-- RADAR + CADASTRO -->
+  <section class="section section--tight">
+    <div class="wrap grid-2" style="align-items:stretch">
+      <div class="card reveal" style="padding:1.8rem">
+        <span class="eyebrow">Radar de Mercado</span>
+        <h3 style="margin:.8rem 0 .4rem;font-size:1.5rem">Referência de preço por região — dados próprios.</h3>
+        <p class="muted small" style="margin-bottom:1.2rem">R$/kg · Machos 180–260 kg · última atualização <span id="radarDate"></span>. Validação humana, sem IA.</p>
+        <div class="bars" id="radarMini"></div>
+        <a class="link-arrow" href="radar.html" style="margin-top:1.4rem">Abrir o Radar completo <span id="a4"></span></a>
+      </div>
+      <div class="card reveal" data-delay="1" style="padding:1.8rem;background:var(--navy);color:#fff;border-color:var(--navy)">
+        <span class="eyebrow" style="color:var(--gold)">Cadastro em dois níveis</span>
+        <h3 style="margin:.8rem 0 1rem;font-size:1.5rem;color:#fff">Comece em 1 minuto. Habilite-se para ofertar quando quiser.</h3>
+        <div style="display:flex;flex-direction:column;gap:.9rem">
+          <div style="display:flex;gap:.8rem;align-items:flex-start"><span style="width:28px;height:28px;border-radius:50%;background:var(--green);display:grid;place-items:center;font-weight:700;font-size:.8rem;flex-shrink:0">1</span><div><b>Cadastro inicial</b><div style="color:rgba(255,255,255,.75);font-size:.9rem">Nome, WhatsApp, e-mail e município/UF. Libera navegação completa e o Radar.</div></div></div>
+          <div style="display:flex;gap:.8rem;align-items:flex-start"><span style="width:28px;height:28px;border-radius:50%;background:var(--gold);display:grid;place-items:center;font-weight:700;font-size:.8rem;flex-shrink:0">2</span><div><b>Cadastro completo</b><div style="color:rgba(255,255,255,.75);font-size:.9rem">Documentos e dados da propriedade. Após validação EB Agro, habilita oferta, cadastro de lote e negociação.</div></div></div>
+        </div>
+        <a class="btn btn--light" href="cadastrar.html" style="margin-top:1.5rem">Criar meu cadastro</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATEMENT -->
+  <section class="statement section">
+    <div class="wrap">
+      <span class="eyebrow reveal" style="color:var(--gold)">A EB Agro</span>
+      <h2 class="reveal" data-delay="1" style="margin:1.2rem 0;max-width:22ch">A tecnologia <em>organiza.</em><br>A confiança <em>sustenta.</em></h2>
+      <p class="reveal" data-delay="2">Mais de três décadas de Estância Bahia no agronegócio, agora como rede de serviços pecuários — do manejo ao pós-venda, com a palavra firme que o mercado já conhece.</p>
+      <div class="row reveal" data-delay="3" style="margin-top:2rem">
+        <a class="btn btn--gold btn--lg" href="como-funciona.html">Conheça o modelo</a>
+        <a class="btn btn--light btn--lg" href="parceiros.html">Seja um Parceiro Indicador</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section section--tight cta-band">
+    <div class="wrap">
+      <div class="cta-card reveal">
+        <div>
+          <h2 style="color:#fff;font-size:clamp(1.8rem,3.5vw,2.8rem)">Tem lote para vender? Cadastre no Catálogo.</h2>
+          <p>Pré-cadastro simples. Nosso time valida o lote, calibra o preço com o Radar e mapeia compradores antes de abrir a Janela.</p>
+        </div>
+        <div class="cta-actions">
+          <a class="btn btn--light btn--lg" href="cadastrar-lote.html">Cadastrar lote</a>
+          <a class="btn btn--navy btn--lg" href="https://wa.me/5565999968158" id="waBtn">WhatsApp</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div data-footer></div>
+
+<script src="assets/main.js"></script>
+<script src="assets/data.js"></script>
+<script>
+EBReady(function () {
+  var I = window.EBIcons;
+  document.getElementById('heroContour').innerHTML = EBContour();
+  document.getElementById('heroScene').innerHTML = EBPasture(0);
+  document.getElementById('b1').innerHTML = I.shield;
+  document.getElementById('b2').innerHTML = I.handshake;
+  ['a1','a2','a3','a4'].forEach(function (id) { document.getElementById(id).innerHTML = I.arrow; });
+  document.getElementById('t1').firstElementChild.innerHTML = I.video;
+  document.getElementById('t2').firstElementChild.innerHTML = I.price;
+  document.getElementById('t3').firstElementChild.innerHTML = I.radar;
+  document.getElementById('t4').firstElementChild.innerHTML = I.user;
+  document.getElementById('p1').innerHTML = I.users;
+  document.getElementById('p2').innerHTML = I.shield;
+  document.getElementById('p3').innerHTML = I.clock;
+  document.getElementById('p4').innerHTML = I.handshake;
+  document.getElementById('waBtn').insertAdjacentHTML('afterbegin', I.whatsapp);
+
+  // Selo Nelore (canto do card)
+  document.getElementById('seal').innerHTML = EBBadge();
+
+  // Janelas em andamento
+  var live = EBJanelas.filter(function (j) { return ['aberta','fechamento','pre-abertura'].indexOf(j.status) >= 0; });
+  document.getElementById('janelasGrid').innerHTML = live.slice(0, 3).map(EBJanelaCard).join('');
+  document.getElementById('stAbertas').innerHTML = EBJanelas.filter(function (j) { return j.status === 'aberta' || j.status === 'fechamento'; }).length + '<span>+</span>';
+
+  // Ciclo
+  document.getElementById('cycleHome').innerHTML = EBCycleHTML('aberta');
+
+  // Oportunidades ativas
+  var ops = EBOportunidades.filter(function (o) { return o.status === 'ativa'; });
+  document.getElementById('opsGrid').innerHTML = ops.slice(0, 3).map(EBOpCard).join('');
+  document.getElementById('stOps').innerHTML = ops.length + '<span>+</span>';
+
+  // Radar mini (Machos 180–260 por região)
+  var r = EBRadar, max = 20;
+  document.getElementById('radarDate').textContent = r.atualizado;
+  document.getElementById('radarMini').innerHTML = Object.keys(r.series).map(function (reg, i) {
+    var v = r.series[reg][0];
+    return '<div class="bar-row"><span class="lab">' + reg + '</span><div class="track"><div class="fill ' + ['','gold','navy'][i] + '" style="width:' + (v / max * 100) + '%"></div></div><span class="num">R$ ' + v.toFixed(2).replace('.', ',') + '</span></div>';
+  }).join('');
+
+  // "Tenho interesse" (delegado)
+  document.addEventListener('click', function (e) {
+    var b = e.target.closest('.btn--interest'); if (!b) return;
+    if (EBSession.level === 'visitante') { location.href = 'cadastrar.html?next=oportunidades.html'; return; }
+    b.classList.toggle('is-on'); b.innerHTML = (b.classList.contains('is-on') ? I.check + ' Interesse registrado' : I.heart + ' Tenho interesse');
+  });
+
+  EBDemoBar();
+});
+</script>
+</body>
+</html>
